@@ -24,9 +24,10 @@ public class Bolas extends Game {
 		Box2D.init();
 
 		batch = new SpriteBatch();
-		img = new Texture("core/assets/badlogic.jpg");
+
+		img = new Texture("core/assets/images/ball.png");
 		this.manager = new GameStateManager();
-		this.manager.push(new PlayingState(this.manager, img));
+		this.manager.push(new BolaState(manager));
 	}
 
 	@Override
@@ -34,10 +35,7 @@ public class Bolas extends Game {
 
 		this.clearScreen();
 
-
-
 		batch.begin();
-
         this.manager.update(Gdx.graphics.getDeltaTime());
         this.manager.render(batch);
 
