@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import org.academiadecodigo.bootcamp.bolas.state.testingstates.PlatformCollisionTestingState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,8 @@ public class Platform {
     private float x;
     private float y;
 
+    private float rotation;
+
     private float speed;
 
     public Platform(float x, float y, float width, float height, World world ) {
@@ -35,38 +38,45 @@ public class Platform {
         this.y = y;
 
         this.sprite = new Sprite(new Texture(Gdx.files.internal("core/assets/images/bar.png")));
-        this.sprite.setSize(this.width, this.height);
-        this.sprite.setPosition(this.x, this.y);
+        this.sprite.setPosition(this.x , this.y );
+        this.sprite.setSize(this.width , this.height );
         this.initializePhysics(world);
     }
 
     private void initializePhysics(World world) {
         // First we create a body definition
         BodyDef bodyDef = new BodyDef();
-
-        // We set our body to dynamic, for something like ground which doesn't move we would set it to StaticBody
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-
-        // Set our body's starting position in the world
         bodyDef.position.set(this.x, this.y);
+
 
         this.body = world.createBody(bodyDef);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(this.width, this.height, new Vector2(this.x, this.y), 0);
+        shape.setAsBox(0.5f * this.width, 0.5f * this.height);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.density = 1f;
         body.createFixture(fixtureDef);
+
+
     }
 
     public void render(SpriteBatch batch) {
-        this.sprite.translate(this.body.getPosition().x - this.x, this.body.getPosition().y - this.y);
-        sprite.draw(batch);
+
+
+        this.sprite.setPosition(this.x  - this.width * 0.5f , this.y - this.height * 0.5f );
+        System.out.println(this.rotation);
+        this.sprite.setRotation(this.rotation);
+        this.sprite.draw(batch);
+
         this.x = this.body.getPosition().x;
         this.y = this.body.getPosition().y;
+        this.rotation = this.body.getAngle();
+
         System.out.println(this.body.getPosition());
+
     }
 
 
@@ -79,11 +89,9 @@ public class Platform {
                 this.body.getPosition().x < x0 || this.body.getPosition().y < y0;
     }
 
-
     public void dispose() {
-        //TODO ????
+        this.sprite.getTexture().dispose();
     }
-
 
 
 }
