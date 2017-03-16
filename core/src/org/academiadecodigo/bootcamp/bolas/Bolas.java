@@ -32,11 +32,7 @@ public class Bolas extends Game {
 
 		img = new Texture("core/assets/images/ball.png");
 		this.manager = new GameStateManager();
-<<<<<<< HEAD
 		this.manager.push(new PlayingState(this.manager));
-=======
-		this.manager.push(new PlatformCollisionTestingState(this.manager));
->>>>>>> origin/dev
 	}
 
 	@Override

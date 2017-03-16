@@ -29,7 +29,6 @@ public class PlatformCollisionTestingState extends State {
         camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0f);
         this.camera.update();
 
-        this.world = new World(new Vector2(0, 0), true);
         this.debugRenderer = new Box2DDebugRenderer();
 
         this.platform = new Platform(5, 1, 4, 1, world);
@@ -53,9 +52,8 @@ public class PlatformCollisionTestingState extends State {
     @Override
     public void render(SpriteBatch batch) {
         batch.setProjectionMatrix(camera.combined);
-        this.debugRenderer.render(world,batch.getProjectionMatrix());
-//        this.platform.render(batch);
-        this.platform2.render(batch);
+        this.platform.render(batch);
+//        this.debugRenderer.render(world,batch.getProjectionMatrix());
     }
 
     @Override

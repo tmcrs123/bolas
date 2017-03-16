@@ -38,8 +38,8 @@ public class Platform {
         this.y = y;
 
         this.sprite = new Sprite(new Texture(Gdx.files.internal("core/assets/images/bar.png")));
-        this.sprite.setSize(this.width * PlatformCollisionTestingState.CONV, this.height * PlatformCollisionTestingState.CONV);
-        this.sprite.setPosition(this.x * PlatformCollisionTestingState.CONV, this.y * PlatformCollisionTestingState.CONV);
+        this.sprite.setPosition(this.x , this.y );
+        this.sprite.setSize(this.width , this.height );
         this.initializePhysics(world);
     }
 
@@ -66,11 +66,6 @@ public class Platform {
     public void render(SpriteBatch batch) {
 
 
-//        this.x = this.body.getPosition().x;
-//        this.y = this.body.getPosition().y;
-
-//        this.sprite.translate(this.body.getPosition().x- this.x, this.body.getPosition().y - this.y);
-
         this.sprite.setPosition(this.x  - this.width * 0.5f , this.y - this.height * 0.5f );
         System.out.println(this.rotation);
         this.sprite.setRotation(this.rotation);
@@ -81,13 +76,12 @@ public class Platform {
         this.rotation = this.body.getAngle();
 
         System.out.println(this.body.getPosition());
-//        System.out.println(this.sprite.getX() + " " + this.sprite.getY());
+
     }
 
 
     public void setSpeed(float newSpeedX, float newSpeedY) {
         this.body.setLinearVelocity(newSpeedX,newSpeedY);
-//        this.body.applyForceToCenter(newSpeedX * 1000, newSpeedY * 1000, true);
     }
 
     public boolean isOutsideBoundaries(int x0, int y0, int xf, int yf) {
