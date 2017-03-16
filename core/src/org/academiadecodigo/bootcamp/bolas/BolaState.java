@@ -21,8 +21,6 @@ public class BolaState extends State{
     Ball ball;
     private OrthographicCamera camera;
     World world;
-    GameStateManager stateManager;
-    Box2DDebugRenderer debugRenderer;
 
 
 
@@ -33,11 +31,6 @@ public class BolaState extends State{
     public BolaState(GameStateManager gameStateManager){
         super(gameStateManager);
         this.gameStateManager = new GameStateManager();
-        world = new World(new Vector2(0,0),true);
-        ball = new Ball(world);
-        camera = new OrthographicCamera(CAMERA_VIEWFINDER_WIDTH_METERS, CAMERA_VIEWFINDER_HEIGHT_METERS);
-        camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0f);
-        debugRenderer = new Box2DDebugRenderer();
 
     }
 
@@ -54,8 +47,6 @@ public class BolaState extends State{
 
     @Override
     public void render(SpriteBatch batch) {
-        camera.update();
-        batch.setProjectionMatrix(camera.combined);
 
         if ((ball.body.getPosition().y ) < ((ball.circle.getRadius()))){
             ball.body.setLinearVelocity(0,0);

@@ -1,6 +1,7 @@
 package org.academiadecodigo.bootcamp.bolas.gameobjects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -27,13 +28,13 @@ public class Ball {
     public Ball(World world){
         bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(30, 30);
+        bodyDef.position.set(5, 2);
 
         Texture tex = new Texture("core/assets/images/ball.png"); // ASSET DO CARALHO
 
         this.sprite = new Sprite(tex);
         this.sprite.setSize(1f, 1f);
-        this.sprite.setPosition(30,30);
+        this.sprite.setPosition(5,2);
 
         this.body = world.createBody(bodyDef);
 
@@ -52,45 +53,43 @@ public class Ball {
         body.createFixture(fixtureDef);
     }
 
-    public static final float BALL_SPEED_PHYSICS = 10000;
 
-    private int x;
-    private int y;
 
-    //radius
-    private int width;
-    private int height;
+    public void render(SpriteBatch batch) {
 
-    public int getX() {
-        return x;
+        if ((this.body.getPosition().y ) < ((this.circle.getRadius()))){
+            this.body.setLinearVelocity(0,0);
+            //this.sprite.setPosition(0, 0);
+            //return;
+        } else {
+            System.out.println(this.body.getPosition().y);
+
+            float xdelta = 0;
+            float ydelta = -2f;
+
+            this.body.setLinearVelocity(0, ydelta);
+
+
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                xdelta = 2f;
+                System.out.println("xdelta" + xdelta);
+                this.body.setLinearVelocity(xdelta, ydelta);
+
+            }
+
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                xdelta = -2f;
+                System.out.println("xdelta" + xdelta);
+                this.body.setLinearVelocity(xdelta, ydelta);
+
+            }
+
+            this.sprite.setPosition(this.body.getPosition().x, this.body.getPosition().y);
+            //sprite.setPosition(body.getPosition().x - sprite.getWidth()/2, body.getPosition().y - sprite.getHeight()/2);
+        }
+        //debugRenderer.render(world, camera.combined);
+        this.sprite.draw(batch);
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
 }
 

@@ -46,7 +46,7 @@ public class Platform {
     private void initializePhysics(World world) {
         // First we create a body definition
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(this.x, this.y);
 
 

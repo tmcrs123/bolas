@@ -5,8 +5,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.Background;
+import org.academiadecodigo.bootcamp.bolas.gameobjects.Ball;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.Platform;
 
 /**
@@ -24,6 +26,8 @@ public class PlayingState extends State {
 
     private Platform platform;
     private World world;
+    private Ball ball;
+    Box2DDebugRenderer debugRenderer;
 
 
     public PlayingState(GameStateManager manager) {
@@ -37,7 +41,11 @@ public class PlayingState extends State {
         this.background = new Background(this.camera.viewportWidth);
 
         this.world = new World(new Vector2(0, 0), true);
+
         this.platform = new Platform(5, 0.5f, 10, 1, world);
+        this.ball = new Ball(this.world);
+
+        debugRenderer = new Box2DDebugRenderer();
 
     }
 
@@ -71,6 +79,7 @@ public class PlayingState extends State {
 
         background.render(batch);
         this.platform.render(batch);
+        this.ball.render(batch);
 
     }
 
