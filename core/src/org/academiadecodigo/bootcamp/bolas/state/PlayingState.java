@@ -1,10 +1,10 @@
 package org.academiadecodigo.bootcamp.bolas.state;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import org.academiadecodigo.bootcamp.bolas.gameobjects.Background;
 
 /**
  * Created by codecadet on 3/16/17.
@@ -12,20 +12,25 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class PlayingState extends State {
 
 
-    private Sprite sprite;
     private float x;
     private float y;
+    private boolean start;
+    private final int DELAY = 10;
+    private int speed = 0;
+    private Background background;
 
-    public PlayingState(GameStateManager manager, Texture texture) {
+
+    public PlayingState(GameStateManager manager) {
+
         super(manager);
 
         this.camera = new OrthographicCamera(10,5);
         camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0f);
         this.camera.update();
 
-        this.sprite = new Sprite(texture);
-        this.sprite.setSize(10f,10f);
-        this.sprite.setPosition(0,-5f);
+        this.background = new Background(10f);
+
+
     }
 
 
@@ -33,19 +38,30 @@ public class PlayingState extends State {
     @Override
     public void handleInput() {
 
+        if(!Gdx.input.isKeyJustPressed(Input.Keys.P) && Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)){
+            this.background.start();
+        }
+        else if(Gdx.input.isKeyJustPressed(Input.Keys.P)){
+            this.background.stop();
+        }
+
     }
 
     @Override
     public void update(float dt) {
-        this.sprite.translate(0,dt);
+        handleInput();
+        background.move(dt, DELAY);
+
     }
 
     @Override
     public void render(SpriteBatch batch) {
+
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
-        this.sprite.draw(batch);
+        background.render(batch);
+
     }
 
     @Override
