@@ -29,6 +29,7 @@ public class GameStateManager {
 
 
     public void update(float dt) {
+        stateStack.peek().handleInput();
         stateStack.peek().update(dt);
     }
 
