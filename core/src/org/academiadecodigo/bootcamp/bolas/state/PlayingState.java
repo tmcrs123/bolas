@@ -13,13 +13,13 @@ public class PlayingState extends State {
 
     private Sprite sprite;
     private float x;
-
     private float y;
 
     public PlayingState(GameStateManager manager, Texture texture) {
         super(manager);
         this.sprite = new Sprite(texture);
-        this.sprite.setSize(1,1);
+        this.sprite.setSize(5f,5f);
+        this.sprite.setPosition(1,1);
     }
 
     @Override
@@ -29,13 +29,13 @@ public class PlayingState extends State {
 
     @Override
     public void update(float dt) {
-        this.x += 1 * dt;
-        System.out.println(this.x);
     }
 
     @Override
     public void render(SpriteBatch batch) {
-        batch.draw(this.sprite, this.x , this.y );
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
+        this.sprite.draw(batch);
     }
 
     @Override

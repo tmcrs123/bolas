@@ -6,7 +6,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2D;
+import com.badlogic.gdx.physics.box2d.World;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.Platform;
 import org.academiadecodigo.bootcamp.bolas.state.GameStateManager;
 import org.academiadecodigo.bootcamp.bolas.state.PlayingState;
@@ -16,6 +18,7 @@ public class Bolas extends Game {
 	Texture img;
 
 	GameStateManager manager;
+	World world;
 
 	
 	@Override
@@ -27,6 +30,7 @@ public class Bolas extends Game {
 		img = new Texture("core/assets/badlogic.jpg");
 		this.manager = new GameStateManager();
 		this.manager.push(new PlayingState(this.manager, img));
+		this.world = new World(new Vector2(0, 0), true);
 	}
 
 	@Override
