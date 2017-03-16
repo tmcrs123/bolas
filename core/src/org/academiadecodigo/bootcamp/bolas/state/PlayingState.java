@@ -1,6 +1,7 @@
 package org.academiadecodigo.bootcamp.bolas.state;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,14 +14,21 @@ public class PlayingState extends State {
 
     private Sprite sprite;
     private float x;
-
     private float y;
 
     public PlayingState(GameStateManager manager, Texture texture) {
         super(manager);
+
+        this.camera = new OrthographicCamera(10,5);
+        camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0f);
+        this.camera.update();
+
         this.sprite = new Sprite(texture);
-        this.sprite.setSize(1,1);
+        this.sprite.setSize(10f,10f);
+        this.sprite.setPosition(0,-5f);
     }
+
+
 
     @Override
     public void handleInput() {
@@ -29,13 +37,15 @@ public class PlayingState extends State {
 
     @Override
     public void update(float dt) {
-        this.x += 1 * dt;
-        System.out.println(this.x);
+        this.sprite.translate(0,dt);
     }
 
     @Override
     public void render(SpriteBatch batch) {
-        batch.draw(this.sprite, this.x , this.y );
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
+
+        this.sprite.draw(batch);
     }
 
     @Override

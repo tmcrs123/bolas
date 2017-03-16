@@ -9,10 +9,11 @@ import org.academiadecodigo.bootcamp.bolas.state.GameStateManager;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.width = 800;
-		config.height = 400;
+
 		config.foregroundFPS = 60;
 		config.backgroundFPS = 60;
+		config.height = 1078/2;
+		config.width = 675;
 		new LwjglApplication(new Bolas(), config);
 
 	}
