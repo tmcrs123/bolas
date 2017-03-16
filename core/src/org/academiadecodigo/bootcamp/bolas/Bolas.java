@@ -18,7 +18,6 @@ import org.academiadecodigo.bootcamp.bolas.state.testingstates.PlatformTestingSt
 public class Bolas extends Game {
 	SpriteBatch batch;
 	Texture img;
-
 	GameStateManager manager;
 	World world;
 
@@ -52,8 +51,6 @@ public class Bolas extends Game {
 		Gdx.gl.glClearColor(0, 0, 0, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	}
-
-
 
 	@Override
 	public void dispose () {

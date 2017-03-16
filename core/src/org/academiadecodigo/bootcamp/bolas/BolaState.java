@@ -2,10 +2,12 @@ package org.academiadecodigo.bootcamp.bolas;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.Ball;
 import org.academiadecodigo.bootcamp.bolas.state.GameStateManager;
@@ -20,9 +22,12 @@ public class BolaState extends State{
     private OrthographicCamera camera;
     World world;
     GameStateManager stateManager;
+    Box2DDebugRenderer debugRenderer;
+
+
 
     public static final float CAMERA_VIEWFINDER_WIDTH_METERS = 40;
-    public static final float CAMERA_VIEWFINDER_HEIGHT_METERS = 20;
+    public static final float CAMERA_VIEWFINDER_HEIGHT_METERS = 40;
 
 
     public BolaState(GameStateManager gameStateManager){
@@ -32,6 +37,7 @@ public class BolaState extends State{
         ball = new Ball(world);
         camera = new OrthographicCamera(CAMERA_VIEWFINDER_WIDTH_METERS, CAMERA_VIEWFINDER_HEIGHT_METERS);
         camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0f);
+        debugRenderer = new Box2DDebugRenderer();
 
     }
 
@@ -42,6 +48,7 @@ public class BolaState extends State{
 
     @Override
     public void update(float dt) {
+        world.step(1/60f, 6, 2);
 
     }
 
@@ -50,36 +57,38 @@ public class BolaState extends State{
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
-        float xdelta = 0;
-        float ydelta = 0;
+        if ((ball.body.getPosition().y ) < ((ball.circle.getRadius()))){
+            ball.body.setLinearVelocity(0,0);
+            //ball.sprite.setPosition(0, 0);
+            //return;
+        } else {
+            System.out.println(ball.body.getPosition().y);
 
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            xdelta = ball.BALL_SPEED_PHYSICS * Gdx.graphics.getDeltaTime();
+            float xdelta = 0;
+            float ydelta = -4f;
+
+            ball.body.setLinearVelocity(0, ydelta);
+
+
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                xdelta = 4f;
+                System.out.println("xdelta" + xdelta);
+                ball.body.setLinearVelocity(xdelta, ydelta);
+
+            }
+
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                xdelta = -4f;
+                System.out.println("xdelta" + xdelta);
+                ball.body.setLinearVelocity(xdelta, ydelta);
+
+            }
+
+            ball.sprite.setPosition(ball.body.getPosition().x, ball.body.getPosition().y);
+            //sprite.setPosition(body.getPosition().x - sprite.getWidth()/2, body.getPosition().y - sprite.getHeight()/2);
         }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-            xdelta = - ball.BALL_SPEED_PHYSICS * Gdx.graphics.getDeltaTime();
-        }
-
-        float xposO = ball.circle.getPosition().x;
-        float ypos0 = ball.circle.getPosition().y;
-
-        ball.body.applyForceToCenter(xdelta,ydelta, true);
-        world.step(1/60f, 6, 2);
-        float xpos = ball.circle.getPosition().x;
-        float ypos = ball.circle.getPosition().y;
-
-
-        ball.sprite.translate((xpos - xposO) ,  (ypos - ypos0));
-
-//        debugRenderer.render(world, camera.combined);
-        System.out.println(ball.circle.getPosition());
-        System.out.println(ball.sprite.getX() + " " + ball.sprite.getY());
-
-        //batch.begin();
+        //debugRenderer.render(world, camera.combined);
         ball.sprite.draw(batch);
-        //batch.end();
-
     }
 
     @Override

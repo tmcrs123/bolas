@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
  * Created by codecadet on 3/16/17.
@@ -15,9 +16,7 @@ public class Ball {
     public CircleShape circle;
     public Sprite sprite;
     public Body body;
-    BodyDef bodyDef;
-    private World world;
-    private long ballLong;
+    public BodyDef bodyDef;
     private SpriteBatch batch;
 
     // Create a circle shape and set its radius to 6
@@ -28,18 +27,18 @@ public class Ball {
     public Ball(World world){
         bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(0, 10);
+        bodyDef.position.set(30, 30);
 
-        Texture tex = new Texture(Gdx.files.internal("core/assets/images/ball.png")); // ASSET DO CARALHO
+        Texture tex = new Texture("core/assets/images/ball.png"); // ASSET DO CARALHO
 
         this.sprite = new Sprite(tex);
-        this.sprite.setSize(1, 1);
-        this.sprite.setPosition(10,10);
+        this.sprite.setSize(1f, 1f);
+        this.sprite.setPosition(30,30);
 
         this.body = world.createBody(bodyDef);
 
         circle = new CircleShape();
-        circle.setRadius(6f);
+        circle.setRadius(1f);
 
         batch = new SpriteBatch();
 
@@ -51,11 +50,9 @@ public class Ball {
         fixtureDef.friction = 0.4f;
         fixtureDef.restitution = 0.6f; // Make it bounce a little bit
         body.createFixture(fixtureDef);
-        circle.dispose();
-        world.step(1/60f,6,2);
     }
 
-    public static final int BALL_SPEED_PHYSICS = 10000;
+    public static final float BALL_SPEED_PHYSICS = 10000;
 
     private int x;
     private int y;
