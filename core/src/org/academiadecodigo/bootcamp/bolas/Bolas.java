@@ -32,6 +32,8 @@ public class Bolas extends Game {
 
 
 		batch = new SpriteBatch();
+
+		img = new Texture("core/assets/images/ball.png");
 		this.manager = new GameStateManager();
 		this.manager.push(new PlatformCollisionTestingState(this.manager));
 	}
@@ -41,9 +43,7 @@ public class Bolas extends Game {
 
 		this.clearScreen();
 
-
 		batch.begin();
-
         this.manager.update(Gdx.graphics.getDeltaTime());
         this.manager.render(batch);
 

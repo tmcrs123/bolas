@@ -11,7 +11,6 @@ public abstract class State {
 
     protected OrthographicCamera camera;
     protected Vector3 vector3;
-
     protected GameStateManager gameStateManager;
 
     public State(GameStateManager manager) {
