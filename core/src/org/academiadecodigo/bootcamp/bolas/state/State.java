@@ -17,9 +17,6 @@ public abstract class State {
     public State(GameStateManager manager) {
         this.gameStateManager = manager;
         this.vector3 = new Vector3();
-        this.camera = new OrthographicCamera(10,10);
-        camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0f);
-        this.camera.update();
     }
 
     public abstract void handleInput();
