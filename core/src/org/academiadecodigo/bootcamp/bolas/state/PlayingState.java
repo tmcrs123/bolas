@@ -40,9 +40,11 @@ public class PlayingState extends State {
 
         this.background = new Background(this.camera.viewportWidth);
 
-        this.world = new World(new Vector2(0, 0), true);
+        this.world = new World(new Vector2(0, -2f), true);
 
-        this.platform = new Platform(5, 0.5f, 10, 1, world);
+        this.platform = new Platform(5, 0.25f, 10, 0.5f, world);
+//        this.platform.setSpeed(0,1);
+
         this.ball = new Ball(this.world);
 
         debugRenderer = new Box2DDebugRenderer();
@@ -61,6 +63,8 @@ public class PlayingState extends State {
             this.background.stop();
         }
 
+        this.ball.handleInput();
+
     }
 
     @Override
@@ -77,9 +81,10 @@ public class PlayingState extends State {
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
-        background.render(batch);
-        this.platform.render(batch);
-        this.ball.render(batch);
+//        background.render(batch);
+//        this.platform.render(batch);
+//        this.ball.render(batch);
+        this.debugRenderer.render(world,camera.combined);
 
     }
 

@@ -47,13 +47,34 @@ public class Ball {
         // Create a fixture definition to apply our shape to
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = circle;
-        fixtureDef.density = 0.5f;
-        fixtureDef.friction = 0.4f;
-        fixtureDef.restitution = 0.6f; // Make it bounce a little bit
+        fixtureDef.density = 1f;
+        fixtureDef.friction = 1f;
         body.createFixture(fixtureDef);
     }
 
 
+    public void handleInput() {
+
+        float xdelta = 0;
+        float ydelta = 0f;
+
+        this.body.setLinearVelocity(0, ydelta);
+
+
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            xdelta = 2f;
+            System.out.println("xdelta" + xdelta);
+            this.body.setLinearVelocity(xdelta, ydelta);
+
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            xdelta = -2f;
+            System.out.println("xdelta" + xdelta);
+            this.body.setLinearVelocity(xdelta, ydelta);
+
+        }
+    }
 
     public void render(SpriteBatch batch) {
 
@@ -64,25 +85,6 @@ public class Ball {
         } else {
             System.out.println(this.body.getPosition().y);
 
-            float xdelta = 0;
-            float ydelta = -2f;
-
-            this.body.setLinearVelocity(0, ydelta);
-
-
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-                xdelta = 2f;
-                System.out.println("xdelta" + xdelta);
-                this.body.setLinearVelocity(xdelta, ydelta);
-
-            }
-
-            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-                xdelta = -2f;
-                System.out.println("xdelta" + xdelta);
-                this.body.setLinearVelocity(xdelta, ydelta);
-
-            }
 
             this.sprite.setPosition(this.body.getPosition().x, this.body.getPosition().y);
             //sprite.setPosition(body.getPosition().x - sprite.getWidth()/2, body.getPosition().y - sprite.getHeight()/2);
