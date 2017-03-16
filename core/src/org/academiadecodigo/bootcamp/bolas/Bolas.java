@@ -27,18 +27,14 @@ public class Bolas extends Game {
 		Box2D.init();
 
 		batch = new SpriteBatch();
-		img = new Texture("core/assets/badlogic.jpg");
 		this.manager = new GameStateManager();
 		this.manager.push(new PlayingState(this.manager, img));
-		this.world = new World(new Vector2(0, 0), true);
 	}
 
 	@Override
 	public void render () {
 
 		this.clearScreen();
-
-
 
 		batch.begin();
 
@@ -50,7 +46,7 @@ public class Bolas extends Game {
 
 
 	private void clearScreen() {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
+		Gdx.gl.glClearColor(0, 0, 0, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	}
 
@@ -59,7 +55,6 @@ public class Bolas extends Game {
 	@Override
 	public void dispose () {
 		batch.dispose();
-		img.dispose();
 	}
 
 }
