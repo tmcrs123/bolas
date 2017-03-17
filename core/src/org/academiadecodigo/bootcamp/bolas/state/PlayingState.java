@@ -84,10 +84,10 @@ public class PlayingState extends State implements com.badlogic.gdx.physics.box2
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
-//        background.render(batch);
-//        this.platform.render(batch);
-//        this.ball.render(batch);
-        this.debugRenderer.render(world,camera.combined);
+        background.render(batch);
+        this.platform.render(batch);
+        this.ball.render(batch);
+//        this.debugRenderer.render(world,camera.combined);
 
     }
 

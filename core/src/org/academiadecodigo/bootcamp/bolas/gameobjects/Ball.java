@@ -34,12 +34,14 @@ public class Ball {
 
         this.sprite = new Sprite(tex);
         this.sprite.setSize(1f, 1f);
-        this.sprite.setPosition(5,2);
+        this.sprite.setPosition(bodyDef.position.x,bodyDef.position.y);
+        this.sprite.setOrigin(sprite.getX()/2,sprite.getY()/2);
+        this.sprite.setOriginCenter();
 
         this.body = world.createBody(bodyDef);
 
         circle = new CircleShape();
-        circle.setRadius(1f);
+        circle.setRadius(sprite.getHeight()/2);
 
         batch = new SpriteBatch();
 
@@ -86,8 +88,9 @@ public class Ball {
             System.out.println(this.body.getPosition().y);
 
 
-            this.sprite.setPosition(this.body.getPosition().x, this.body.getPosition().y);
-            //sprite.setPosition(body.getPosition().x - sprite.getWidth()/2, body.getPosition().y - sprite.getHeight()/2);
+//            this.sprite.setPosition(this.body.getPosition().x, this.body.getPosition().y);
+            this.sprite.setPosition(this.body.getPosition().x - this.sprite.getWidth()/2, this.body.getPosition().y - sprite.getHeight()/2);
+            this.sprite.rotate(this.body.getAngle());
         }
         //debugRenderer.render(world, camera.combined);
         this.sprite.draw(batch);
