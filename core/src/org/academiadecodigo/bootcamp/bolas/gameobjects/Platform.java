@@ -35,7 +35,7 @@ public class Platform {
         this.x = x;
         this.y = y;
 
-        this.sprite = new Sprite(new Texture(Gdx.files.internal("core/assets/images/bar.png")));
+        this.sprite = new Sprite(new Texture(Gdx.files.internal("core/assets/images/redbar.png")));
         this.sprite.setPosition(this.x , this.y );
         this.sprite.setSize(this.width , this.height );
         this.initializePhysics(world);

@@ -12,9 +12,6 @@ import com.badlogic.gdx.physics.box2d.*;
  */
 public class LifeCounter {
 
-    public static final float BALL_DENSITY = 1;
-    public static final float BALL_FRICTION = 1;
-
     private Sprite leftSprite;
     private Sprite rightSprite;
 

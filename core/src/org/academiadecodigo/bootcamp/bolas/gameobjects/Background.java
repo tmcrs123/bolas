@@ -15,22 +15,17 @@ public class Background {
     private static float DIGIT_WIDTH = 0.1f;
     private static float DIGIT_HEIGHT = 0.1f;
 
-    private static float DIGIT_Y = 1;
-    private static float DIGIT_X = 0.5f;
+    private static float DIGIT_Y = 0;
+    private static float DIGIT_X = 0;
 
     private Sprite sprite;
     private Sprite spriteClone;
     private Texture texture;
-    private Texture textureScoreX;
-    private Texture textureScore1;
-    private Texture textureScore2;
-    private Texture textureScore3;
 
     private float cameraWidth;
     private float cameraHeight;
     private boolean start;
 
-    private List<Sprite> scoreSprites;
 
     private int score;
 
@@ -51,23 +46,8 @@ public class Background {
         this.spriteClone.setSize(cameraWidth, cameraHeight * 2);
         this.spriteClone.setPosition(0, (-cameraHeight * 2) + 0.05f);
 
-        this.initializeSpriteArray();
-
     }
 
-    public void initializeSpriteArray() {
-        this.scoreSprites = new LinkedList<>();
-
-
-        for (int i = 0; i < 10; i++) {
-            Texture t = new Texture("core/assets/images/numeral" + i + ".png");
-            Sprite s = new Sprite(t);
-            s.setSize(1, 1);
-
-            this.scoreSprites.add(new Sprite(t));
-        }
-
-    }
 
 
     public void move(float dt, int DELAY) {
@@ -108,26 +88,11 @@ public class Background {
         }
     }
 
-    public void setScore(int score) {
-        this.score = score;
-    }
 
     public void render(SpriteBatch batch) {
 
-        String scoreString = Integer.toString(this.score).trim();
-
-        for (int i = 0; i < scoreString.length(); i++) {
-
-            int digit = Integer.parseInt(scoreString.charAt(i) + "");
-
-            Sprite s = this.scoreSprites.get(digit);
-            s.setPosition(DIGIT_X + DIGIT_WIDTH * i, DIGIT_Y);
-
-            s.draw(batch);
-
-        }
-
-
+        this.sprite.draw(batch);
+        this.spriteClone.draw(batch);
 
     }
 
@@ -143,10 +108,6 @@ public class Background {
 
         this.sprite.getTexture().dispose();
         this.spriteClone.getTexture().dispose();
-
-        for (Sprite s : this.scoreSprites) {
-            s.getTexture().dispose();
-        }
 
     }
 

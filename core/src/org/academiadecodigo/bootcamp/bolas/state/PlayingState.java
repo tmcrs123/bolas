@@ -56,6 +56,7 @@ public class PlayingState extends State {
     private World world;
     private Ball ball;
     private LifeCounter lifeCounter;
+    private ScoreCounter scoreCounter;
 
     private int playerLives;
 
@@ -108,6 +109,7 @@ public class PlayingState extends State {
 
         oggSound = Gdx.audio.newSound(Gdx.files.internal("core/assets/sound/sfx_lose.ogg"));
 
+        this.scoreCounter = new ScoreCounter(CAMERA_VIEWPOINT_WIDTH/2 - LIFE_COUNTER_WIDTH, LIFE_COUNTER_Y, LIFE_COUNTER_WIDTH, LIFE_COUNTER_WIDTH, 1);
 
     }
 
@@ -174,6 +176,7 @@ public class PlayingState extends State {
         world.step(dt, 6, 2);
 
         background.move(dt, (int) this.backgroundDelay);
+        this.scoreCounter.setScore(this.score);
 
 //        if( ((int) Math.log10(score)) % 3 == 0 ){
 //            System.out.println(((int) Math.log10(score)));
@@ -195,7 +198,6 @@ public class PlayingState extends State {
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
-        this.background.setScore(this.score);
         this.background.render(batch);
 
         this.checkForPlatformDeletion();
@@ -204,6 +206,7 @@ public class PlayingState extends State {
         this.renderBall(batch);
 
         this.renderLifeCounter(batch);
+        this.scoreCounter.render(batch);
 
 
     }
@@ -311,6 +314,7 @@ public class PlayingState extends State {
         }
 
         this.lifeCounter.dispose();
+        this.scoreCounter.dispose();
         this.ball.dispose();
     }
 
