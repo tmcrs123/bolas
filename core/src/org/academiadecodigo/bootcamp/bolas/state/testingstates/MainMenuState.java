@@ -2,6 +2,7 @@ package org.academiadecodigo.bootcamp.bolas.state.testingstates;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -24,33 +25,39 @@ public class MainMenuState extends State {
 
 
     public MainMenuState(GameStateManager manager) {
+
         super(manager);
 
         texture = new Texture("core/assets/images/background.png");
         text = new Texture("core/assets/images/logo.png");
         tex = new Texture("core/assets/images/start.png");
 
+        this.camera = new OrthographicCamera(20,20);
+        camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0f);
+        this.camera.update();
+
         this.sprite = new Sprite(texture);
-        this.sprite.setSize(675,1078/2);
+        this.sprite.setSize(20,20);
         this.sprite.setPosition(0,0);
 
         this.logo = new Sprite(text);
-        this.logo.setSize(text.getWidth(),text.getHeight());
+        this.logo.setSize(14,10);
         this.logo.setPosition(sprite.getWidth()/6, sprite.getHeight()/2);
 
         this.start = new Sprite(tex);
-        this.start.setSize(tex.getWidth(), tex.getHeight());
-        this.start.setPosition(10,140);
+        this.start.setSize(18,2);
+        this.start.setPosition(sprite.getX()+1.2f,sprite.getY()+sprite.getHeight()/5);
 
 
     }
 
     @Override
     public void handleInput() {
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
             gameStateManager.pop(this);
             gameStateManager.push(new PlayingState(gameStateManager));
-            dispose();
+
         }
 
     }
@@ -62,6 +69,8 @@ public class MainMenuState extends State {
 
     @Override
     public void render(SpriteBatch batch) {
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
         sprite.draw(batch);
         logo.draw(batch);
         start.draw(batch);
