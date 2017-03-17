@@ -8,6 +8,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.bullet.collision.Collision;
 import com.badlogic.gdx.physics.bullet.collision.ContactListener;
+import com.sun.tools.javac.code.Attribute;
+import com.sun.tools.javac.util.Constants;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.Background;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.Ball;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.ComplexPlatform;
@@ -19,7 +21,7 @@ import org.academiadecodigo.bootcamp.bolas.gameobjects.PowerUp;
  */
 public class PlayingState extends State{
 
-    public static final Vector2 GRAVITY = new Vector2(0, -100);
+    public static final Vector2 GRAVITY = new Vector2(0, 0);
 
     private float x;
     private float y;
@@ -54,7 +56,8 @@ public class PlayingState extends State{
         this.platform.setSpeed(0,1f);
 
 
-        this.speedUp = new PowerUp(5.0f, 2.5f, 2f, 2f, world);
+
+        this.speedUp = new PowerUp(5.0f, 2.5f, 1f, 1f, world);
         this.ball = new Ball(this.world);
 
         debugRenderer = new Box2DDebugRenderer();
@@ -91,10 +94,15 @@ public class PlayingState extends State{
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
-//        background.render(batch);
-//        this.platform.render(batch);
-//        this.ball.render(batch);
-//        this.speedUp.render(batch);
+        if (ball.body.getPosition().y+ball.circle.getRadius() > camera.viewportHeight){
+            ball.sprite.setAlpha(0);
+            ball.setAlive(false);
+        }
+
+        background.render(batch);
+        this.platform.render(batch);
+        this.ball.render(batch);
+        this.speedUp.render(batch);
         this.debugRenderer.render(world, camera.combined);
 
     }

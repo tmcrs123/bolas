@@ -18,14 +18,14 @@ public class Ball {
     public Sprite sprite;
     public Body body;
     private BodyDef bodyDef;
-
-    private float speed;
+    private boolean alive = true;
+    private float speed = 10f;
     // Create a circle shape and set its radius to 6
 
 
     // Create our fixture and attach it to the body
 
-    public Ball(World world){
+    public Ball(World world) {
         bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(5, 2);
@@ -34,15 +34,14 @@ public class Ball {
 
         this.sprite = new Sprite(tex);
         this.sprite.setSize(1f, 1f);
-        this.sprite.setPosition(bodyDef.position.x,bodyDef.position.y);
-        this.sprite.setOrigin(sprite.getX()/2,sprite.getY()/2);
+        this.sprite.setPosition(bodyDef.position.x, bodyDef.position.y);
+        this.sprite.setOrigin(sprite.getX() / 2, sprite.getY() / 2);
         this.sprite.setOriginCenter();
 
         this.body = world.createBody(bodyDef);
 
         circle = new CircleShape();
-        circle.setRadius(sprite.getHeight()/2);
-
+        circle.setRadius(sprite.getHeight() / 2);
 
 
         // Create a fixture definition to apply our shape to
@@ -62,43 +61,50 @@ public class Ball {
         this.body.setLinearVelocity(0, ydelta);
 
 
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            xdelta = 10f;
-            System.out.println("xdelta" + xdelta);
-            this.body.setLinearVelocity(xdelta, ydelta);
+        if (Gdx.input.isKeyPressed(Input.Keys.
+                RIGHT)) {
+            this.body.setLinearVelocity(speed, ydelta);
 
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            xdelta = -10f;
-            System.out.println("xdelta" + xdelta);
-            this.body.setLinearVelocity(xdelta, ydelta);
+            this.body.setLinearVelocity(speed, ydelta);
 
         }
     }
 
     public void render(SpriteBatch batch) {
 
-        if ((this.body.getPosition().y ) < ((this.circle.getRadius()))){
-            this.body.setLinearVelocity(0,0);
-            //this.sprite.setPosition(0, 0);
-            //return;
-        } else {
-            System.out.println(this.body.getPosition().y);
+//        if ((this.body.getPosition().y) < ((this.circle.getRadius()))) {
+//            this.body.setLinearVelocity(0, 0);
+        //this.sprite.setPosition(0, 0);
+        //return;
+//        } else {
+//            System.out.println(this.body.getPosition().y);
+//
+//
+////            this.sprite.setPosition(this.body.getPosition().x, this.body.getPosition().y);
+//
+//        }
+
+        this.sprite.setPosition(this.body.getPosition().x - this.sprite.getWidth() / 2, this.body.getPosition().y - sprite.getHeight() / 2);
+        this.sprite.rotate(this.body.getAngle());
 
 
-//            this.sprite.setPosition(this.body.getPosition().x, this.body.getPosition().y);
-            this.sprite.setPosition(this.body.getPosition().x - this.sprite.getWidth()/2, this.body.getPosition().y - sprite.getHeight()/2);
-            this.sprite.rotate(this.body.getAngle());
-        }
-        //debugRenderer.render(world, camera.combined);
         this.sprite.draw(batch);
     }
 
 
-    public void setSpeed( float  speed) {
+    public void setSpeed(float speed) {
         this.speed = speed;
     }
 
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
+    }
 }
 
