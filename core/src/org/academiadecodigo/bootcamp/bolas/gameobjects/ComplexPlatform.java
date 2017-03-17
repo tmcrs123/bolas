@@ -15,7 +15,7 @@ public class ComplexPlatform {
 
     private List<Platform> platforms;
 
-    private static float boundaryHeight = 3;
+    private float boundaryHeight ;
 
     private float x;
     private float y;
@@ -30,24 +30,25 @@ public class ComplexPlatform {
     private float speedY;
 
 
-    public ComplexPlatform(float x, float y, float width, float height,  World world) {
+    public ComplexPlatform(float x, float y, float width, float height, float boundaryHeight,  World world) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
+        this.boundaryHeight = boundaryHeight;
         this.platforms = new LinkedList<>();
 
     }
 
-    public ComplexPlatform(float x, float y, float width, float height) {
-        this(x, y, width, height, null);
-
+    public ComplexPlatform(float x, float y, float width, float height, float boundaryHeight) {
+        this(x, y, width, height, boundaryHeight, null);
     }
 
+
     public void constructPlatforms(World world) {
-        this.platforms.add(new Platform(this.x - this.width / 2 - WALL_THICKNESS / 2, this.y + boundaryHeight/2 + this.height/2, WALL_THICKNESS, boundaryHeight, world));
+        this.platforms.add(new Platform(this.x - this.width / 2 - WALL_THICKNESS / 2, this.y, WALL_THICKNESS, boundaryHeight, world));
         this.createMiddlePlatforms(world);
-        this.platforms.add(new Platform( this.x + this.width/2 + WALL_THICKNESS/2 , this.y + boundaryHeight/2 + this.height/2, WALL_THICKNESS, boundaryHeight , world));
+        this.platforms.add(new Platform( this.x + this.width/2 + WALL_THICKNESS/2 , this.y, WALL_THICKNESS, boundaryHeight , world));
 
     }
 
