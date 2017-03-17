@@ -5,6 +5,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -56,6 +58,8 @@ public class PlayingState extends State {
     private World world;
     private Ball ball;
     private LifeCounter lifeCounter;
+    private Texture texture;
+    private Sprite sprite;
 
     private int playerLives;
 
@@ -81,6 +85,9 @@ public class PlayingState extends State {
         super(manager);
 
         this.contactListener = new PlatformBallContactListener();
+
+        texture = new Texture("core/assets/images/heart.png");
+        sprite = new Sprite(texture);
 
         this.initializeLifeCounter();
 
@@ -121,6 +128,8 @@ public class PlayingState extends State {
         this.playerLives = 3;
         this.lifeCounter = new LifeCounter(LIFE_COUNTER_X, LIFE_COUNTER_Y, LIFE_COUNTER_WIDTH, LIFE_COUNTER_WIDTH);
         this.lifeCounter.setLives(this.playerLives);
+        this.sprite.setSize(LIFE_COUNTER_WIDTH,LIFE_COUNTER_WIDTH);
+        this.sprite.setPosition(LIFE_COUNTER_X + LIFE_COUNTER_WIDTH ,LIFE_COUNTER_Y);
     }
 
     private void initializeBall() {
@@ -200,7 +209,7 @@ public class PlayingState extends State {
 
         this.checkForPlatformDeletion();
         this.renderPlatforms(batch);
-
+        this.sprite.draw(batch);
         this.renderBall(batch);
 
         this.renderLifeCounter(batch);
