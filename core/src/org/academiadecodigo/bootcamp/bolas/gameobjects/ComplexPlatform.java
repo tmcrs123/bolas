@@ -94,7 +94,7 @@ public class ComplexPlatform {
 
             System.out.println(weights[i]);
             if (i == 0) {
-                this.platforms.add(new Platform( weights[0]/2 , this.y, weights[0], this.height, world));
+                this.platforms.add(new Platform( this.x - this.width/2 + weights[0]/2 , this.y, weights[0], this.height, world));
                 System.out.println(weights[0]/2);
                 cumSum = weights[0];
                 cumNHoles = 1;
@@ -105,18 +105,13 @@ public class ComplexPlatform {
             float pos = 0;
             while (pos < cumNHoles * this.holeWidth + cumSum + weights[i]/2) {
                 pos += 0.01;
-
-//                System.out.println(pos);
-//                if (pos + weights[i] > this.width) {
-//                    break;
-//                }
             }
 
             cumSum += weights[i];
             cumNHoles += 1;
 
             System.out.println(pos);
-            this.platforms.add(new Platform( pos , this.y, weights[i], this.height, world));
+            this.platforms.add(new Platform(this.x - this.width/2 + pos , this.y, weights[i], this.height, world));
         }
 
 

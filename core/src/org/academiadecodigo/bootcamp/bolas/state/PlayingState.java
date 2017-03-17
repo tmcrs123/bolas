@@ -37,7 +37,7 @@ public class PlayingState extends State{
 
         super(manager);
 
-        this.camera = new OrthographicCamera(10,5);
+        this.camera = new OrthographicCamera(20,10);
         camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0f);
         this.camera.update();
 
@@ -45,8 +45,8 @@ public class PlayingState extends State{
 
         this.world = new World(GRAVITY, true);
 
-        this.platform = new ComplexPlatform(5, 0.25f, 10, 0.5f,  world);
-        this.platform.setHoleWidth(2f);
+        this.platform = new ComplexPlatform(10, 0.25f, 4, 0.5f,  world);
+        this.platform.setHoleWidth(0.1f);
         this.platform.setHoleNumber(4);
         this.platform.constructPlatforms(world);
         this.platform.setSpeed(0,1f);
@@ -87,10 +87,10 @@ public class PlayingState extends State{
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
-        background.render(batch);
-        this.platform.render(batch);
+//        background.render(batch);
+//        this.platform.render(batch);
 //        this.ball.render(batch);
-//        this.debugRenderer.render(world,camera.combined);
+        this.debugRenderer.render(world,camera.combined);
 
     }
 
