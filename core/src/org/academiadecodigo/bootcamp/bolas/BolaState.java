@@ -20,6 +20,7 @@ import org.academiadecodigo.bootcamp.bolas.state.State;
 public class BolaState extends State {
 
 
+    public static final Vector2 GRAVITY = new Vector2(0, -100);
     private PowerUp speedUp;
     private OrthographicCamera camera;
     World world;
@@ -32,7 +33,11 @@ public class BolaState extends State {
     public BolaState(GameStateManager gameStateManager) {
         super(gameStateManager);
         this.gameStateManager = new GameStateManager();
-        speedUp = new PowerUp(world);
+        World world = new World(GRAVITY,true);
+        speedUp = new PowerUp(10,10,2,2,world);
+        this.camera = new OrthographicCamera(40,40);
+        camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0f);
+        this.camera.update();
 
     }
 
@@ -43,12 +48,22 @@ public class BolaState extends State {
 
     @Override
     public void update(float dt) {
-        world.step(1 / 60f, 6, 2);
+//        world.step(1 / 60f, 6, 2);
 
     }
 
     @Override
     public void render(SpriteBatch batch) {
+
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
+
+
+
+        speedUp.render(batch);
+
+
+//        this.debugRenderer.render(world,camera.combined);
 
 
     }

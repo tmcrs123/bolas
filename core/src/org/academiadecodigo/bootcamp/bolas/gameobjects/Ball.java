@@ -22,6 +22,7 @@ public class Ball {
     private Body body;
     private BodyDef bodyDef;
 
+
     private float Xspeed;
 
     private float radius;
@@ -37,6 +38,7 @@ public class Ball {
 
     // Create our fixture and attach it to the body
 
+
     public Ball(float x, float y, float radius, World world){
         this.x = x;
         this.y = y;
@@ -50,6 +52,7 @@ public class Ball {
 
         this.sprite = new Sprite(tex);
 
+
         this.sprite.setSize(this.radius*2, this.radius*2);
         this.sprite.setPosition(bodyDef.position.x,bodyDef.position.y);
         this.sprite.setOrigin(sprite.getX()/2,sprite.getY()/2);
@@ -58,9 +61,8 @@ public class Ball {
         this.body = world.createBody(bodyDef);
 
         circle = new CircleShape();
+
         circle.setRadius(this.radius);
-
-
 
         // Create a fixture definition to apply our shape to
         FixtureDef fixtureDef = new FixtureDef();
@@ -93,6 +95,7 @@ public class Ball {
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+
             xdelta = - this.Xspeed;
 
             //System.out.println("xdelta" + xdelta);
@@ -102,6 +105,7 @@ public class Ball {
     }
 
     public void render(SpriteBatch batch) {
+
 
         this.x = this.body.getPosition().x - this.sprite.getWidth() / 2;
         this.y = this.body.getPosition().y - this.sprite.getHeight() / 2;
@@ -146,6 +150,10 @@ public class Ball {
 
     public Body getBody() {
         return this.body;
+    }
+
+    public Sprite getSprite() {
+        return this.getSprite();
     }
 
 }

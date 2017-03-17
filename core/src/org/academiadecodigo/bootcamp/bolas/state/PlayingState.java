@@ -6,10 +6,12 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+
 import org.academiadecodigo.bootcamp.bolas.gameobjects.Background;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.Ball;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.ComplexPlatform;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.Physics.PlatformBallContactListener;
+import org.academiadecodigo.bootcamp.bolas.gameobjects.PowerUp;
 import org.academiadecodigo.bootcamp.bolas.state.testingstates.MainMenuState;
 
 import java.util.Deque;
@@ -44,7 +46,10 @@ public class PlayingState extends State {
 
     private float backgroundDelay;
 
+    private PowerUp speedUp;
+
     Box2DDebugRenderer debugRenderer;
+    private int score;
 
     private PlatformBallContactListener contactListener;
 
@@ -129,6 +134,13 @@ public class PlayingState extends State {
 
         camera.update();
         batch.setProjectionMatrix(camera.combined);
+        score++;
+
+
+        if (ball.getY()+ball.getRadius() > camera.viewportHeight){
+            ball.getSprite().setAlpha(0);
+            //ball.setAlive(false);
+        }
 
         background.render(batch);
 
@@ -210,11 +222,14 @@ public class PlayingState extends State {
 
 
         this.ball.render(batch);
+
     }
 
     private void lostGame() {
+        
         gameStateManager.pop(this);
         gameStateManager.push(new MainMenuState(gameStateManager));
+
     }
 
     @Override
