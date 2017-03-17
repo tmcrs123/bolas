@@ -46,7 +46,7 @@ public class Platform {
     private void initializePhysics(World world) {
         // First we create a body definition
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(this.x, this.y);
 
 
@@ -57,8 +57,11 @@ public class Platform {
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 1f;
+        fixtureDef.density = 300000000f;
+
         body.createFixture(fixtureDef);
+        body.setGravityScale(0);
+
 
 
     }
