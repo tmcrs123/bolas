@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.physics.box2d.*;
 
 /**
@@ -23,7 +22,7 @@ public class Ball {
     private BodyDef bodyDef;
 
 
-    private float Xspeed;
+    private float joltX;
 
     private float radius;
 
@@ -31,7 +30,8 @@ public class Ball {
     private float y;
 
     private boolean canJump = true;
-    private float jolt;
+    private float joltY;
+    private float maxHorizontalSpeed;
 
     // Create a circle shape and set its radius to 6
 
@@ -69,7 +69,7 @@ public class Ball {
         fixtureDef.shape = circle;
         fixtureDef.density = BALL_DENSITY;
         fixtureDef.friction = BALL_FRICTION;
-        fixtureDef.restitution = 0.00001f;
+        fixtureDef.restitution = 0f;
         body.createFixture(fixtureDef);
         body.setUserData(this);
 
@@ -82,26 +82,32 @@ public class Ball {
         float ydelta = 0f;
 
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            xdelta = this.Xspeed;
+            xdelta = this.joltX;
 //            System.out.println("xdelta" + xdelta);
 
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             if (this.canJump) {
-                ydelta = this.jolt;
+                ydelta = this.joltY;
             }
 
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
 
-            xdelta = - this.Xspeed;
+            xdelta = - this.joltX;
 
             //System.out.println("xdelta" + xdelta);
         }
 
-        this.body.applyForceToCenter(xdelta, ydelta, true);
+        this.body.applyForceToCenter(0, ydelta, true);
+
+        if (this.body.getLinearVelocity().x > this.maxHorizontalSpeed) {
+            return;
+        }
+
+        this.body.applyForceToCenter(xdelta, 0, true);
     }
 
     public void render(SpriteBatch batch) {
@@ -119,12 +125,16 @@ public class Ball {
     }
 
 
-    public void setHorizontalSpeed(float speed) {
-        this.Xspeed = speed;
+    public void setHorizontalJolt(float jolt) {
+        this.joltX = jolt;
     }
 
     public void setVerticalJolt(float jolt) {
-        this.jolt = jolt;
+        this.joltY = jolt;
+    }
+
+    public void setMaxHorizontalSpeed(float speed){
+        this.maxHorizontalSpeed = speed;
     }
 
 

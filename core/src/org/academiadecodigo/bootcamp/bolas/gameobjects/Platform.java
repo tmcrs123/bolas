@@ -29,8 +29,6 @@ public class Platform {
 
     private float rotation;
 
-    private float speed;
-
     public Platform(float x, float y, float width, float height, World world ) {
         this.height = height;
         this.width = width;
@@ -62,7 +60,6 @@ public class Platform {
         body.createFixture(fixtureDef);
         body.setGravityScale(0);
         body.setUserData(this);
-
 
 
     }
