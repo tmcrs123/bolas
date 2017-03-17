@@ -79,10 +79,15 @@ public class PlayingState extends State {
     private Music oggMusic;
     private Sound oggSound;
 
+    private boolean start;
+    private float musicPosition;
+
 
     public PlayingState(GameStateManager manager) {
 
         super(manager);
+
+        this.start = true;
 
         this.contactListener = new PlatformBallContactListener();
 
@@ -170,30 +175,48 @@ public class PlayingState extends State {
 
         if (!Gdx.input.isKeyJustPressed(Input.Keys.P) && Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
             this.background.start();
+            start();
+            oggMusic.play();
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
             this.background.stop();
+            stop();
+            oggMusic.pause();
+
         }
 
-        this.ball.handleInput();
+        if(start) {
+            this.ball.handleInput();
+        }
 
+    }
+
+    private void start() {
+        this.start = true;
+    }
+
+    private void stop(){
+        this.start = false;
     }
 
     @Override
     public void update(float dt) {
-        world.step(dt, 6, 2);
+        if(start) {
+            world.step(dt, 6, 2);
 
-        background.move(dt, (int) this.backgroundDelay);
+            background.move(dt, (int) this.backgroundDelay);
 
 //        if( ((int) Math.log10(score)) % 3 == 0 ){
 //            System.out.println(((int) Math.log10(score)));
             platformSpeed += PLATFORM_SPEEDUP_UNIT * score;
 //            System.out.println("SPEED UP YOU FUCK");
-            for(ComplexPlatform plat : platforms){
-                plat.setSpeed(0,platformSpeed);
+            for (ComplexPlatform plat : platforms) {
+                plat.setSpeed(0, platformSpeed);
             }
 //        }
 
-        score++;
+            score++;
+
+        }
 
 
     }
@@ -201,18 +224,21 @@ public class PlayingState extends State {
     @Override
     public void render(SpriteBatch batch) {
 
-        camera.update();
-        batch.setProjectionMatrix(camera.combined);
+        if(start) {
+            camera.update();
+            batch.setProjectionMatrix(camera.combined);
 
-        this.background.setScore(this.score);
-        this.background.render(batch);
+            this.background.setScore(this.score);
+            this.background.render(batch);
 
-        this.checkForPlatformDeletion();
-        this.renderPlatforms(batch);
-        this.sprite.draw(batch);
-        this.renderBall(batch);
+            this.checkForPlatformDeletion();
+            this.renderPlatforms(batch);
+            this.sprite.draw(batch);
+            this.renderBall(batch);
 
-        this.renderLifeCounter(batch);
+            this.renderLifeCounter(batch);
+
+        }
 
 
     }
@@ -283,7 +309,7 @@ public class PlayingState extends State {
             return;
         }
 
-        if (this.ball.getY() > camera.viewportHeight || this.ball.getY() < 0) {
+        if (this.ball.getY() > camera.viewportHeight ) {
             this.playerLives--;
             oggSound.play();
             this.ball.dispose();
@@ -297,6 +323,10 @@ public class PlayingState extends State {
             }
 
             this.lifeCounter.setLives(this.playerLives);
+        }
+
+        if(this.ball.getY() + this.ball.getRadius()*2 < 0){
+            ball.getBody().applyForceToCenter(GRAVITY.x,-GRAVITY.y*2.5f,false);
         }
 
 
@@ -314,13 +344,14 @@ public class PlayingState extends State {
 
     @Override
     public void dispose() {
+        if(start) {
+            for (ComplexPlatform cp : this.platforms) {
+                cp.dispose();
+            }
 
-        for (ComplexPlatform cp : this.platforms) {
-            cp.dispose();
+            this.lifeCounter.dispose();
+            this.ball.dispose();
         }
-
-        this.lifeCounter.dispose();
-        this.ball.dispose();
     }
 
 
