@@ -10,13 +10,14 @@ import com.badlogic.gdx.physics.bullet.collision.Collision;
 import com.badlogic.gdx.physics.bullet.collision.ContactListener;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.Background;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.Ball;
+import org.academiadecodigo.bootcamp.bolas.gameobjects.ComplexPlatform;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.Platform;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.PowerUp;
 
 /**
  * Created by codecadet on 3/16/17.
  */
-public class PlayingState extends State implements com.badlogic.gdx.physics.box2d.ContactListener{
+public class PlayingState extends State{
 
     public static final Vector2 GRAVITY = new Vector2(0, -100);
 
@@ -27,7 +28,7 @@ public class PlayingState extends State implements com.badlogic.gdx.physics.box2
     private int speed = 0;
     private Background background;
 
-    private Platform platform;
+    private ComplexPlatform platform;
     private World world;
     private Ball ball;
     private PowerUp speedUp;
@@ -38,16 +39,18 @@ public class PlayingState extends State implements com.badlogic.gdx.physics.box2
 
         super(manager);
 
-        this.camera = new OrthographicCamera(10,5);
+        this.camera = new OrthographicCamera(20,10);
         camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0f);
         this.camera.update();
 
         this.background = new Background(this.camera.viewportWidth);
 
         this.world = new World(GRAVITY, true);
-        this.world.setContactListener(this);
 
-        this.platform = new Platform(5, 0.25f, 10, 0.5f, world);
+        this.platform = new ComplexPlatform(10, 0.25f, 4, 0.5f,  world);
+        this.platform.setHoleWidth(0.1f);
+        this.platform.setHoleNumber(4);
+        this.platform.constructPlatforms(world);
         this.platform.setSpeed(0,1f);
 
 
@@ -98,36 +101,11 @@ public class PlayingState extends State implements com.badlogic.gdx.physics.box2
 
     @Override
     public void dispose() {
-
+        this.platform.dispose();
     }
 
     public void setDelay(float dt) {
         this.delay = dt;
     }
 
-    @Override
-    public void beginContact(Contact contact) {
-
-//        Fixture fixA = contact.getFixtureA();
-//        Fixture fixB = contact.getFixtureB();
-//
-//        System.out.println(fixB.getFriction());
-//        fixB.getBody().setLinearVelocity(fixA.getBody().getLinearVelocity());
-
-    }
-
-    @Override
-    public void endContact(Contact contact) {
-
-    }
-
-    @Override
-    public void preSolve(Contact contact, Manifold oldManifold) {
-
-    }
-
-    @Override
-    public void postSolve(Contact contact, ContactImpulse impulse) {
-
-    }
 }

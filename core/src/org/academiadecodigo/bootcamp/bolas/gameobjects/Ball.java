@@ -17,9 +17,9 @@ public class Ball {
     public CircleShape circle;
     public Sprite sprite;
     public Body body;
-    public BodyDef bodyDef;
-    private SpriteBatch batch;
+    private BodyDef bodyDef;
 
+    private float speed;
     // Create a circle shape and set its radius to 6
 
 
@@ -43,7 +43,6 @@ public class Ball {
         circle = new CircleShape();
         circle.setRadius(sprite.getHeight()/2);
 
-        batch = new SpriteBatch();
 
 
         // Create a fixture definition to apply our shape to
@@ -64,14 +63,14 @@ public class Ball {
 
 
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            xdelta = 2f;
+            xdelta = 10f;
             System.out.println("xdelta" + xdelta);
             this.body.setLinearVelocity(xdelta, ydelta);
 
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            xdelta = -2f;
+            xdelta = -10f;
             System.out.println("xdelta" + xdelta);
             this.body.setLinearVelocity(xdelta, ydelta);
 
@@ -94,6 +93,11 @@ public class Ball {
         }
         //debugRenderer.render(world, camera.combined);
         this.sprite.draw(batch);
+    }
+
+
+    public void setSpeed( float  speed) {
+        this.speed = speed;
     }
 
 }
