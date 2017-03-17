@@ -55,7 +55,6 @@ public class Background {
         if (start) {
             score++;
 
-            System.out.println(this.sprite.getY());
 
             if (this.sprite.getY() < 0) {
 

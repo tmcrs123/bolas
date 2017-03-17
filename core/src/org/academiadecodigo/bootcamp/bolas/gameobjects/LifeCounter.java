@@ -15,6 +15,8 @@ public class LifeCounter {
     private Sprite leftSprite;
     private Sprite rightSprite;
 
+    private Sprite heartSprite;
+
     private float x;
     private float y;
     private float width;
@@ -57,6 +59,11 @@ public class LifeCounter {
         this.leftSprite.setPosition(this.x,this.y);
         this.rightSprite.setPosition(this.leftSprite.getX() + this.width / 2, this.y);
 
+        Texture heartTexture = new Texture("core/assets/images/heart.png");
+
+        this.heartSprite = new Sprite(heartTexture);
+        this.heartSprite.setPosition(this.x + 1, this.y);
+        this.heartSprite.setSize(this.width, this.height);
 
     }
 
@@ -65,6 +72,7 @@ public class LifeCounter {
 
         this.leftSprite.draw(batch);
         this.rightSprite.draw(batch);
+        this.heartSprite.draw(batch);
 
     }
 
@@ -90,6 +98,7 @@ public class LifeCounter {
     public void dispose() {
         this.leftSprite.getTexture().dispose();
         this.rightSprite.getTexture().dispose();
+        this.heartSprite.getTexture().dispose();
     }
 
 }

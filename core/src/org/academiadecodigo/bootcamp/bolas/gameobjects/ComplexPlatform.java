@@ -72,7 +72,6 @@ public class ComplexPlatform {
 
         for (int i = 0; i < weights.length; i++) {
             weights[i] = (float) Math.ceil( Math.random() * 10 );
-            System.out.println(weights[i]);
         }
 
         double weightSum = 0;
@@ -80,13 +79,12 @@ public class ComplexPlatform {
         for (float f : weights) {
             weightSum += f;
         }
-        System.out.println(weightSum);
 
         double debSum = 0;
         for (int i = 0; i < weights.length; i++) {
             weights[i] /= weightSum;
             debSum += weights[i];
-            System.out.println(weights[i]);
+
         }
 
         for (int i = 0; i < weights.length; i++) {
@@ -94,8 +92,6 @@ public class ComplexPlatform {
             debSum += weights[i];
         }
 
-        System.out.println(debSum);
-        System.out.println(" " );
 
 
         float cumSum = 0;
@@ -103,10 +99,9 @@ public class ComplexPlatform {
 
         for (int i = 0; i < weights.length; i++) {
 
-            System.out.println(weights[i]);
             if (i == 0) {
                 this.platforms.add(new Platform( this.x - this.width/2 + weights[0]/2 , this.y, weights[0], this.height, world));
-                System.out.println(weights[0]/2);
+
                 cumSum = weights[0];
                 cumNHoles = 1;
                 continue;
@@ -121,7 +116,7 @@ public class ComplexPlatform {
             cumSum += weights[i];
             cumNHoles += 1;
 
-            System.out.println(pos);
+
             this.platforms.add(new Platform(this.x - this.width/2 + pos , this.y, weights[i], this.height, world));
         }
 

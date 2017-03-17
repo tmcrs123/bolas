@@ -5,6 +5,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -56,6 +58,7 @@ public class PlayingState extends State {
     private World world;
     private Ball ball;
     private LifeCounter lifeCounter;
+
     private ScoreCounter scoreCounter;
 
     private int playerLives;
@@ -76,10 +79,15 @@ public class PlayingState extends State {
     private Music oggMusic;
     private Sound oggSound;
 
+    private boolean start;
+    private float musicPosition;
+
 
     public PlayingState(GameStateManager manager) {
 
         super(manager);
+
+        this.start = true;
 
         this.contactListener = new PlatformBallContactListener();
 
@@ -120,7 +128,7 @@ public class PlayingState extends State {
     }
 
     private void initializeLifeCounter() {
-        this.playerLives = 3;
+        this.playerLives = 0;
         this.lifeCounter = new LifeCounter(LIFE_COUNTER_X, LIFE_COUNTER_Y, LIFE_COUNTER_WIDTH, LIFE_COUNTER_WIDTH);
         this.lifeCounter.setLives(this.playerLives);
     }
@@ -163,17 +171,33 @@ public class PlayingState extends State {
 
         if (!Gdx.input.isKeyJustPressed(Input.Keys.P) && Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
             this.background.start();
+            start();
+            oggMusic.play();
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
             this.background.stop();
+            stop();
+            oggMusic.pause();
+
         }
 
-        this.ball.handleInput();
+        if(start) {
+            this.ball.handleInput();
+        }
 
+    }
+
+    private void start() {
+        this.start = true;
+    }
+
+    private void stop(){
+        this.start = false;
     }
 
     @Override
     public void update(float dt) {
-        world.step(dt, 6, 2);
+        if(start) {
+            world.step(dt, 6, 2);
 
         background.move(dt, (int) this.backgroundDelay);
         this.scoreCounter.setScore(this.score);
@@ -182,12 +206,14 @@ public class PlayingState extends State {
 //            System.out.println(((int) Math.log10(score)));
             platformSpeed += PLATFORM_SPEEDUP_UNIT * score;
 //            System.out.println("SPEED UP YOU FUCK");
-            for(ComplexPlatform plat : platforms){
-                plat.setSpeed(0,platformSpeed);
+            for (ComplexPlatform plat : platforms) {
+                plat.setSpeed(0, platformSpeed);
             }
 //        }
 
-        score++;
+            score++;
+
+        }
 
 
     }
@@ -195,18 +221,21 @@ public class PlayingState extends State {
     @Override
     public void render(SpriteBatch batch) {
 
-        camera.update();
-        batch.setProjectionMatrix(camera.combined);
+        if(start) {
+            camera.update();
 
-        this.background.render(batch);
+            batch.setProjectionMatrix(camera.combined);
 
-        this.checkForPlatformDeletion();
-        this.renderPlatforms(batch);
+            this.background.render(batch);
 
-        this.renderBall(batch);
+            this.checkForPlatformDeletion();
+            this.renderPlatforms(batch);
+            this.renderBall(batch);
 
-        this.renderLifeCounter(batch);
-        this.scoreCounter.render(batch);
+            this.renderLifeCounter(batch);
+            this.scoreCounter.render(batch);
+
+        }
 
 
     }
@@ -277,7 +306,7 @@ public class PlayingState extends State {
             return;
         }
 
-        if (this.ball.getY() > camera.viewportHeight || this.ball.getY() < 0) {
+        if (this.ball.getY() > camera.viewportHeight || this.ball.getY() + this.ball.getRadius()*2 < 0 ) {
             this.playerLives--;
             oggSound.play();
             this.ball.dispose();
@@ -303,14 +332,18 @@ public class PlayingState extends State {
         oggMusic.stop();
         oggSound.play(5f);
         gameStateManager.pop(this);
-        gameStateManager.push(new GameOverState(gameStateManager,"Carlos",score));
+        gameStateManager.push(new GameOverState(gameStateManager,score));
     }
 
     @Override
     public void dispose() {
+        if(start) {
+            for (ComplexPlatform cp : this.platforms) {
+                cp.dispose();
+            }
 
-        for (ComplexPlatform cp : this.platforms) {
-            cp.dispose();
+            this.lifeCounter.dispose();
+            this.ball.dispose();
         }
 
         this.lifeCounter.dispose();
