@@ -16,7 +16,7 @@ import org.academiadecodigo.bootcamp.bolas.gameobjects.Platform;
 /**
  * Created by codecadet on 3/16/17.
  */
-public class PlayingState extends State implements com.badlogic.gdx.physics.box2d.ContactListener{
+public class PlayingState extends State{
 
     public static final Vector2 GRAVITY = new Vector2(0, -100);
 
@@ -44,9 +44,11 @@ public class PlayingState extends State implements com.badlogic.gdx.physics.box2
         this.background = new Background(this.camera.viewportWidth);
 
         this.world = new World(GRAVITY, true);
-        this.world.setContactListener(this);
 
-        this.platform = new ComplexPlatform(5, 0.25f, 10, 0.5f, 5, world);
+        this.platform = new ComplexPlatform(5, 0.25f, 10, 0.5f,  world);
+        this.platform.setHoleWidth(2f);
+        this.platform.setHoleNumber(4);
+        this.platform.constructPlatforms(world);
         this.platform.setSpeed(0,1f);
 
         this.ball = new Ball(this.world);
@@ -87,43 +89,18 @@ public class PlayingState extends State implements com.badlogic.gdx.physics.box2
 
         background.render(batch);
         this.platform.render(batch);
-        this.ball.render(batch);
+//        this.ball.render(batch);
 //        this.debugRenderer.render(world,camera.combined);
 
     }
 
     @Override
     public void dispose() {
-
+        this.platform.dispose();
     }
 
     public void setDelay(float dt) {
         this.delay = dt;
     }
 
-    @Override
-    public void beginContact(Contact contact) {
-
-//        Fixture fixA = contact.getFixtureA();
-//        Fixture fixB = contact.getFixtureB();
-//
-//        System.out.println(fixB.getFriction());
-//        fixB.getBody().setLinearVelocity(fixA.getBody().getLinearVelocity());
-
-    }
-
-    @Override
-    public void endContact(Contact contact) {
-
-    }
-
-    @Override
-    public void preSolve(Contact contact, Manifold oldManifold) {
-
-    }
-
-    @Override
-    public void postSolve(Contact contact, ContactImpulse impulse) {
-
-    }
 }
