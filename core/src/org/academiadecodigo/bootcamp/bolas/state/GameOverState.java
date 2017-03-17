@@ -15,9 +15,12 @@ import java.io.IOException;
  */
 public class GameOverState extends State implements Input.TextInputListener {
 
-    private Sprite sprite;
-    private Texture img;
-    private Texture bg;
+    private Sprite pressEnter;
+    private Sprite background;
+    private Sprite gameOver;
+    private Texture pressEnter_texture;
+    private Texture background_texture;
+    private Texture gameOver_texture;
     private String name;
     private FileEditor fileEditor;
     private int score;
@@ -26,30 +29,27 @@ public class GameOverState extends State implements Input.TextInputListener {
     public GameOverState(GameStateManager gameStateManager, int score){
         super(gameStateManager);
         fileEditor = new FileEditor();
-        img = new Texture("/Users/codecadet/Documents/bolas/core/assets/images/gameover.png");
-        bg = new Texture("/Users/codecadet/Documents/bolas/core/assets/images/bye.jpg");
+        pressEnter_texture= new Texture("/Users/codecadet/Documents/bolas/core/assets/images/gameover.png");
+        background_texture = new Texture("/Users/codecadet/Documents/bolas/core/assets/images/bye.jpg");
+        gameOver_texture = new Texture("/Users/codecadet/Documents/bolas/core/assets/images/over.png");
         this.score = score;
 
         this.camera = new OrthographicCamera(20,20);
         camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0f);
         this.camera.update();
 
-        this.sprite = new Sprite(img);
-        this.sprite.setSize(30,30);
-        this.sprite.setPosition(15,15);
+        this.background = new Sprite(background_texture);
+        this.background.setSize(20,20);
+        this.background.setPosition(0,0);
 
+        this.pressEnter = new Sprite(pressEnter_texture);
+        this.pressEnter.setSize(6,5);
+        this.pressEnter.setPosition(7,4);
 
-        this.sprite = new Sprite(img);
-        this.sprite.setSize(20,20);
+        this.gameOver = new Sprite(gameOver_texture);
+        this.gameOver.setSize(10,10);
+        this.gameOver.setPosition(5,7);
 
-
-        this.sprite = new Sprite(bg);
-        this.sprite.setSize(30,30);
-        this.sprite.setPosition(10,10);
-
-
-        this.sprite = new Sprite(bg);
-        this.sprite.setSize(20,20);
 
     }
 
@@ -91,7 +91,10 @@ public class GameOverState extends State implements Input.TextInputListener {
 
         camera.update();
         batch.setProjectionMatrix(camera.combined);
-        sprite.draw(batch);
+        background.draw(batch);
+        pressEnter.draw(batch);
+        gameOver.draw(batch);
+
 
 
 
