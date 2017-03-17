@@ -36,6 +36,8 @@ public class PlayingState extends State {
     private static final float PLATFORM_WIDTH = CAMERA_VIEWPOINT_WIDTH;
     private static final float PLATFORM_HEIGHT = CAMERA_VIEWPOINT_HEIGHT / 20;
 
+    private static final float PLATFORM_SPEEDUP_UNIT = 0.00001f;
+
     private static final float BOUNDARY_HEIGHT = CAMERA_VIEWPOINT_HEIGHT / PLATFORMS_PER_HEIGHT;
 
     private static final float LIFE_COUNTER_Y = CAMERA_VIEWPOINT_HEIGHT-1;
@@ -74,9 +76,6 @@ public class PlayingState extends State {
     private Music oggMusic;
     private Sound oggSound;
 
-    private final float taskTime = 10f;
-    private Timer timer;
-
 
     public PlayingState(GameStateManager manager) {
 
@@ -110,7 +109,6 @@ public class PlayingState extends State {
 
         oggSound = Gdx.audio.newSound(Gdx.files.internal("core/assets/sound/sfx_lose.ogg"));
 
-        timer =  new Timer();
 
     }
 
@@ -178,13 +176,14 @@ public class PlayingState extends State {
 
         background.move(dt, (int) this.backgroundDelay);
 
-        if(score % 1000 == 0 ){
-            System.out.println("SPEED UP YOU FUCK");
+//        if( ((int) Math.log10(score)) % 3 == 0 ){
+//            System.out.println(((int) Math.log10(score)));
+            platformSpeed += PLATFORM_SPEEDUP_UNIT * score;
+//            System.out.println("SPEED UP YOU FUCK");
             for(ComplexPlatform plat : platforms){
-                plat.setSpeed(0,platformSpeed+1f);
+                plat.setSpeed(0,platformSpeed);
             }
-            platformSpeed += 0.5f;
-        }
+//        }
 
 
 

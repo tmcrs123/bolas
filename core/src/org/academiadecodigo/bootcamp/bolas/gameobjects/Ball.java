@@ -36,11 +36,6 @@ public class Ball {
 
     private Sound oggSound;
 
-    // Create a circle shape and set its radius to 6
-
-
-    // Create our fixture and attach it to the body
-
 
     public Ball(float x, float y, float radius, World world){
         this.x = x;
@@ -88,7 +83,6 @@ public class Ball {
 
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             xdelta = this.joltX;
-//            System.out.println("xdelta" + xdelta);
 
         }
 
@@ -105,14 +99,10 @@ public class Ball {
 
             xdelta = - this.joltX;
 
-            //System.out.println("xdelta" + xdelta);
         }
 
         this.body.applyForceToCenter(0, ydelta, true);
 
-//        if (Math.abs(this.body.getLinearVelocity().x) > this.maxHorizontalSpeed) {
-//            return;
-//        }
 
         this.body.setLinearVelocity(xdelta, this.body.getLinearVelocity().y);
     }
