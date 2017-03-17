@@ -5,13 +5,11 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.physics.bullet.collision.Collision;
-import com.badlogic.gdx.physics.bullet.collision.ContactListener;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.Background;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.Ball;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.ComplexPlatform;
-import org.academiadecodigo.bootcamp.bolas.gameobjects.Platform;
 
 /**
  * Created by codecadet on 3/16/17.
@@ -38,10 +36,10 @@ public class PlayingState extends State{
         super(manager);
 
         this.camera = new OrthographicCamera(10,10);
-        camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0f);
+        this.camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0f);
         this.camera.update();
 
-        this.background = new Background(this.camera.viewportWidth);
+        this.background = new Background(this.camera.viewportWidth, this.camera.viewportHeight);
 
         this.world = new World(GRAVITY, true);
         this.ball = new Ball(this.world);

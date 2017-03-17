@@ -5,9 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
  * Created by codecadet on 3/16/17.
@@ -79,7 +77,7 @@ public class Ball {
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             xdelta = - this.Xspeed;
 
-            System.out.println("xdelta" + xdelta);
+            //System.out.println("xdelta" + xdelta);
         }
 
         this.body.setLinearVelocity(xdelta, ydelta);
@@ -92,7 +90,7 @@ public class Ball {
             //this.sprite.setPosition(0, 0);
             //return;
         } else {
-            System.out.println(this.body.getPosition().y);
+//            System.out.println(this.body.getPosition().y);
 
 
 //            this.sprite.setPosition(this.body.getPosition().x, this.body.getPosition().y);
