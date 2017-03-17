@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.Background;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.Ball;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.ComplexPlatform;
+import org.academiadecodigo.bootcamp.bolas.gameobjects.PowerUp;
 
 import java.util.Deque;
 import java.util.LinkedList;
@@ -31,6 +32,7 @@ public class PlayingState extends State{
     private Ball ball;
     private PowerUp speedUp;
     Box2DDebugRenderer debugRenderer;
+    private int score;
 
     private Deque<ComplexPlatform> platforms;
 
@@ -96,10 +98,12 @@ public class PlayingState extends State{
 
         camera.update();
         batch.setProjectionMatrix(camera.combined);
+        score++;
+
 
         if (ball.body.getPosition().y+ball.circle.getRadius() > camera.viewportHeight){
             ball.sprite.setAlpha(0);
-            ball.setAlive(false);
+            //ball.setAlive(false);
         }
 
         background.render(batch);

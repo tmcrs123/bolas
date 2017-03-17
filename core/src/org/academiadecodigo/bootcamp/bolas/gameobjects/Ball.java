@@ -12,9 +12,9 @@ import com.badlogic.gdx.physics.box2d.*;
  */
 public class Ball {
 
-    private CircleShape circle;
-    private Sprite sprite;
-    private Body body;
+    public CircleShape circle;
+    public Sprite sprite;
+    public Body body;
     private BodyDef bodyDef;
 
 
