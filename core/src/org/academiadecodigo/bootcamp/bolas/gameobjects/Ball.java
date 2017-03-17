@@ -104,18 +104,15 @@ public class Ball {
     }
 
 
-    public void setXSpeed( float  speed) {
-        this.Xspeed = speed;
+    public void setSpeed( float  xspeed, float yspeed) {
+        this.Xspeed = xspeed;
+        this.YSpeed = yspeed;
     }
 
-    public void setYSpeed(float speed) {
-        this.YSpeed = speed;
-    }
 
     public float getRadius() {
         return radius;
     }
-
 
     public float getX() {
         return x;

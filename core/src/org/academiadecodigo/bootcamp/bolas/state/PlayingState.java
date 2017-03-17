@@ -21,18 +21,23 @@ public class PlayingState extends State{
     public static final Vector2 GRAVITY = new Vector2(0, -100);
 
     private static final float BALL_RADIUS = 0.5f ;
+    private static final float PLATFORMS_PER_HEIGHT = 4;
+    private static final float BOUNDARY_THICKNESS = 0.1f;
+    private static final float INITIAL_BALL_SPAWN_X = 10;
+    private static final float INITIAL_BALL_SPAWN_Y = 18;
 
     private float delay = 1;
     private Background background;
 
     private ComplexPlatform platform;
+    private ComplexPlatform platform2;
     private World world;
     private Ball ball;
+    private float ballSpeed;
+
     Box2DDebugRenderer debugRenderer;
 
     private Deque<ComplexPlatform> platforms;
-
-    private boolean add;
 
 
     public PlayingState(GameStateManager manager) {
@@ -46,26 +51,38 @@ public class PlayingState extends State{
         this.background = new Background(this.camera.viewportWidth, this.camera.viewportHeight);
 
         this.world = new World(GRAVITY, true);
-        this.ball = new Ball(10, 18, BALL_RADIUS, this.world);
-        this.ball.setXSpeed(10);
-        this.ball.setYSpeed(10);
+        this.ball = new Ball(INITIAL_BALL_SPAWN_X, INITIAL_BALL_SPAWN_Y, BALL_RADIUS, this.world);
 
-        this.platform = new ComplexPlatform(10, 2.25f, 10, 0.5f, camera.viewportHeight/4,  world);
-        this.platform.setHoleWidth(this.ball.getRadius() * 2 * 1.1f);
-        this.platform.setHoleNumber(3);
-        this.platform.constructPlatforms(world);
+        this.ballSpeed = 10;
 
+        this.ball.setSpeed(this.ballSpeed, this.ballSpeed);
 
-        this.platform.setSpeed(0,5f);
 
         this.platforms = new LinkedList<>();
-        this.platforms.add(this.platform);
+        this.initializePlatformList();
+
 
         debugRenderer = new Box2DDebugRenderer();
-        this.add = true;
 
     }
 
+
+    private void initializePlatformList() {
+
+        for (int i = 1;  i <= PLATFORMS_PER_HEIGHT-1 ; i++ ) {
+
+            ComplexPlatform pla= new ComplexPlatform(10, i * camera.viewportHeight / PLATFORMS_PER_HEIGHT, 10, BOUNDARY_THICKNESS, camera.viewportHeight/ PLATFORMS_PER_HEIGHT);
+            pla.setHoleWidth(this.ball.getRadius() * 2 * 1.1f);
+            pla.setHoleNumber(3);
+            pla.constructPlatforms(world);
+
+            pla.setSpeed(0,5f);
+
+            this.platforms.add(pla);
+        }
+
+
+    }
 
 
     @Override
@@ -99,7 +116,7 @@ public class PlayingState extends State{
         background.render(batch);
 
         this.checkForPlatformDeletion();
-        this.renderComplex(batch);
+        this.renderPlatforms(batch);
 
         this.renderBall(batch);
 
@@ -107,7 +124,7 @@ public class PlayingState extends State{
 
     }
 
-    private void renderComplex(SpriteBatch batch) {
+    private void renderPlatforms(SpriteBatch batch) {
 
         for (ComplexPlatform cp : this.platforms) {
             cp.render(batch);
@@ -127,7 +144,7 @@ public class PlayingState extends State{
                 continue;
             }
 
-            if (copyPlats.get(i).getY() > camera.viewportHeight / 4) {
+            if (copyPlats.get(i).getY() > camera.viewportHeight / PLATFORMS_PER_HEIGHT) {
 
                 ComplexPlatform platform = null;
 
