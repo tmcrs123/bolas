@@ -46,9 +46,9 @@ public class ComplexPlatform {
 
 
     public void constructPlatforms(World world) {
-        this.platforms.add(new Platform(this.x - this.width / 2 - WALL_THICKNESS / 2, this.y - boundaryHeight/2, WALL_THICKNESS, boundaryHeight, world));
+        this.platforms.add(new Platform(this.x - this.width / 2 - WALL_THICKNESS / 2, this.y - boundaryHeight/2 , WALL_THICKNESS, boundaryHeight, world));
         this.createMiddlePlatforms(world);
-        this.platforms.add(new Platform( this.x + this.width/2 + WALL_THICKNESS/2 , this.y - boundaryHeight /2, WALL_THICKNESS, boundaryHeight , world));
+        this.platforms.add(new Platform( this.x + this.width/2 + WALL_THICKNESS/2 , this.y - boundaryHeight/2 , WALL_THICKNESS, boundaryHeight , world));
 
     }
 
@@ -161,6 +161,10 @@ public class ComplexPlatform {
 
     public void setHoleNumber(int holeNumber) {
         this.holeNumber = holeNumber;
+    }
+
+    public float getBoundaryHeight() {
+        return this.boundaryHeight;
     }
 
     public void dispose() {
