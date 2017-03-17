@@ -62,7 +62,7 @@ public class LifeCounter {
         Texture heartTexture = new Texture("core/assets/images/heart.png");
 
         this.heartSprite = new Sprite(heartTexture);
-        this.heartSprite.setPosition(this.x + 1, this.y);
+        this.heartSprite.setPosition(this.x + 1.01f, this.y);
         this.heartSprite.setSize(this.width, this.height);
 
     }

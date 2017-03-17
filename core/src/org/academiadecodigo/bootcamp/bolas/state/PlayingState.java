@@ -37,7 +37,7 @@ public class PlayingState extends State {
     private static final float PLATFORM_WIDTH = CAMERA_VIEWPOINT_WIDTH;
     private static final float PLATFORM_HEIGHT = CAMERA_VIEWPOINT_HEIGHT / 20;
 
-    private static final float PLATFORM_SPEEDUP_UNIT = 0.00001f;
+    private static final float PLATFORM_SPEEDUP_UNIT = 0.000001f;
 
     private static final float BOUNDARY_HEIGHT = CAMERA_VIEWPOINT_HEIGHT / PLATFORMS_PER_HEIGHT;
 
@@ -87,6 +87,8 @@ public class PlayingState extends State {
 
         super(manager);
 
+        this.playerLives = 2;
+
         this.start = true;
 
         this.contactListener = new PlatformBallContactListener();
@@ -128,7 +130,6 @@ public class PlayingState extends State {
     }
 
     private void initializeLifeCounter() {
-        this.playerLives = 0;
         this.lifeCounter = new LifeCounter(LIFE_COUNTER_X, LIFE_COUNTER_Y, LIFE_COUNTER_WIDTH, LIFE_COUNTER_WIDTH);
         this.lifeCounter.setLives(this.playerLives);
     }
