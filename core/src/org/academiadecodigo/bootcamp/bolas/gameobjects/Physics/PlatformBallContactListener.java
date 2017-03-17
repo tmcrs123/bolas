@@ -1,5 +1,7 @@
 package org.academiadecodigo.bootcamp.bolas.gameobjects.Physics;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.physics.box2d.*;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.Ball;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.ComplexPlatform;
@@ -14,19 +16,20 @@ public class PlatformBallContactListener implements ContactListener {
 
     private Deque<ComplexPlatform> platforms;
     private Ball ball;
+    private Sound fallSound;
 
 
-//    public PlatformBallContactListener(Deque<ComplexPlatform> platforms, Ball ball) {
-//        this.platforms = platforms;
-//        this.ball = ball;
-//    }
+    public PlatformBallContactListener() {
+        fallSound = Gdx.audio.newSound(Gdx.files.internal("core/assets/sound/sfx_twoTone.ogg"));
+    }
 
     @Override
     public void beginContact(Contact contact) {
 
         if (this.theProperBodiesForBallJumping(contact)) {
             ball.setCanJump(true);
-            System.out.println("aaaaaaaaaaa");
+            fallSound.play(5f);
+            //System.out.println("aaaaaaaaaaa");
         }
 
     }
@@ -81,7 +84,7 @@ public class PlatformBallContactListener implements ContactListener {
 
         if (this.theProperBodiesForBallJumping(contact)) {
             ball.setCanJump(false);
-            System.out.println("aaaaaaaaaaa");
+            //System.out.println("aaaaaaaaaaa");
         }
     }
 

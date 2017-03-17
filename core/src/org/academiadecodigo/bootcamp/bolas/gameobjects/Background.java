@@ -143,7 +143,7 @@ public class Background {
 
         this.sprite.getTexture().dispose();
         this.spriteClone.getTexture().dispose();
-        
+
         for (Sprite s : this.scoreSprites) {
             s.getTexture().dispose();
         }
