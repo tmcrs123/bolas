@@ -62,14 +62,14 @@ public class Ball {
 
 
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            xdelta = 2f;
+            xdelta = 10f;
             System.out.println("xdelta" + xdelta);
             this.body.setLinearVelocity(xdelta, ydelta);
 
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            xdelta = -2f;
+            xdelta = -10f;
             System.out.println("xdelta" + xdelta);
             this.body.setLinearVelocity(xdelta, ydelta);
 

@@ -9,9 +9,9 @@ import java.util.List;
 /**
  * Created by codecadet on 3/16/17.
  */
-public class ComplexPlaform {
+public class ComplexPlatform {
 
-    public static final float WALL_THICKNESS = 0.1f;
+    public static final float WALL_THICKNESS = 0.5f;
 
     private List<Platform> platforms;
 
@@ -24,16 +24,16 @@ public class ComplexPlaform {
     private float speed;
 
 
-    public ComplexPlaform(float x, float y, float width, float height, float limitHeight, World world) {
+    public ComplexPlatform(float x, float y, float width, float height, float limitHeight, World world) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.platforms = new LinkedList<>();
 
-        this.platforms.add(new Platform( this.x - this.x - WALL_THICKNESS/2 - 0.1f , this.y + limitHeight * 0.5f + this.height/2, WALL_THICKNESS, limitHeight, world));
+        this.platforms.add(new Platform( this.x - this.width/2 - WALL_THICKNESS/2 , this.y + limitHeight * 0.5f + this.height/2, WALL_THICKNESS, limitHeight, world));
         this.platforms.add(new Platform( this.x, this.y, this.width, this.height, world));
-        this.platforms.add(new Platform( this.x + this.x + WALL_THICKNESS/2 + 0.1f , this.y + limitHeight * 0.5f + this.height/2, WALL_THICKNESS, limitHeight, world));
+        this.platforms.add(new Platform( this.x + this.width/2 + WALL_THICKNESS/2 , this.y + limitHeight * 0.5f + this.height/2, WALL_THICKNESS, limitHeight, world));
 
 
     }
@@ -55,6 +55,12 @@ public class ComplexPlaform {
     public void setSpeed(float newSpeedX, float newSpeedY) {
         for (Platform p : this.platforms) {
             p.setSpeed(newSpeedX, newSpeedY);
+        }
+    }
+
+    public void dispose() {
+        for (Platform p : this.platforms) {
+            p.dispose();
         }
     }
 
