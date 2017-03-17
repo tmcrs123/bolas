@@ -12,8 +12,6 @@ public class Background {
     private Sprite sprite;
     private Sprite spriteClone;
     private Texture texture;
-    private float positionX;
-    private float positionY;
     private float cameraWidth;
     private float cameraHeight;
     private boolean start;
@@ -26,7 +24,7 @@ public class Background {
         this.cameraHeight = cameraHeight;
 
         this.sprite = new Sprite(texture);
-        this.sprite.setSize(10,cameraHeight*2);
+        this.sprite.setSize(cameraWidth,cameraHeight*2);
         this.sprite.setPosition(0,-cameraHeight);
 
         this.spriteClone = new Sprite(texture);
