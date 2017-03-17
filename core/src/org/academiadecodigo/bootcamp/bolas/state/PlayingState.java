@@ -10,7 +10,8 @@ import com.badlogic.gdx.physics.box2d.*;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.Background;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.Ball;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.ComplexPlatform;
-import org.academiadecodigo.bootcamp.bolas.gameobjects.PowerUp;
+
+import org.academiadecodigo.bootcamp.bolas.state.testingstates.MainMenuState;
 
 import java.util.Deque;
 import java.util.LinkedList;
@@ -191,7 +192,10 @@ public class PlayingState extends State{
     }
 
     private void lostGame() {
-       System.exit(0);
+        
+        gameStateManager.pop(this);
+        gameStateManager.push(new MainMenuState(gameStateManager));
+
     }
 
     @Override
