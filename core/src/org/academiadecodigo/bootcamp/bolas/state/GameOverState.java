@@ -17,6 +17,7 @@ public class GameOverState extends State implements Input.TextInputListener {
 
     private Sprite sprite;
     private Texture img;
+    private Texture bg;
     private String name;
     private FileEditor fileEditor;
     private int score;
@@ -25,7 +26,8 @@ public class GameOverState extends State implements Input.TextInputListener {
     public GameOverState(GameStateManager gameStateManager, int score){
         super(gameStateManager);
         fileEditor = new FileEditor();
-        img = new Texture("core/assets/images/logo.png");
+        img = new Texture("/Users/codecadet/Documents/bolas/core/assets/images/gameover.png");
+        bg = new Texture("/Users/codecadet/Documents/bolas/core/assets/images/bye.jpg");
         this.score = score;
 
         this.camera = new OrthographicCamera(20,20);
@@ -34,10 +36,19 @@ public class GameOverState extends State implements Input.TextInputListener {
 
         this.sprite = new Sprite(img);
         this.sprite.setSize(30,30);
-        this.sprite.setPosition(0,0);
+        this.sprite.setPosition(15,15);
 
 
         this.sprite = new Sprite(img);
+        this.sprite.setSize(20,20);
+
+
+        this.sprite = new Sprite(bg);
+        this.sprite.setSize(30,30);
+        this.sprite.setPosition(10,10);
+
+
+        this.sprite = new Sprite(bg);
         this.sprite.setSize(20,20);
 
     }
@@ -51,7 +62,7 @@ public class GameOverState extends State implements Input.TextInputListener {
         //enter e só com enter
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
-            Gdx.input.getTextInput(this,"Let me save your score!","","Enter your name.");
+            Gdx.input.getTextInput(this,"Let me save your score!","","");
         }
 
 
@@ -99,7 +110,7 @@ public class GameOverState extends State implements Input.TextInputListener {
 
     @Override
     public void canceled() {
-        name = "";
+        name = "anonymous";
 
     }
 }
