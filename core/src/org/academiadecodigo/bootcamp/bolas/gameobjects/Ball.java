@@ -14,12 +14,16 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  */
 public class Ball {
 
-    public CircleShape circle;
-    public Sprite sprite;
-    public Body body;
+    private CircleShape circle;
+    private Sprite sprite;
+    private Body body;
     private BodyDef bodyDef;
 
-    private float speed;
+    private float Xspeed;
+    private float YSpeed;
+
+    private float radius;
+
     // Create a circle shape and set its radius to 6
 
 
@@ -33,7 +37,8 @@ public class Ball {
         Texture tex = new Texture("core/assets/images/ball.png"); // ASSET DO CARALHO
 
         this.sprite = new Sprite(tex);
-        this.sprite.setSize(1f, 1f);
+        this.radius = .5f;
+        this.sprite.setSize(this.radius*2, this.radius*2);
         this.sprite.setPosition(bodyDef.position.x,bodyDef.position.y);
         this.sprite.setOrigin(sprite.getX()/2,sprite.getY()/2);
         this.sprite.setOriginCenter();
@@ -41,7 +46,7 @@ public class Ball {
         this.body = world.createBody(bodyDef);
 
         circle = new CircleShape();
-        circle.setRadius(sprite.getHeight()/2);
+        circle.setRadius(this.radius);
 
 
 
@@ -59,22 +64,25 @@ public class Ball {
         float xdelta = 0;
         float ydelta = 0f;
 
-        this.body.setLinearVelocity(0, ydelta);
-
-
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            xdelta = 10f;
+            xdelta = this.Xspeed;
             System.out.println("xdelta" + xdelta);
-            this.body.setLinearVelocity(xdelta, ydelta);
 
         }
+
+//        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+//            xdelta = this.Xspeed;
+//            System.out.println("xdelta" + xdelta);
+//
+//        }
 
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            xdelta = -10f;
-            System.out.println("xdelta" + xdelta);
-            this.body.setLinearVelocity(xdelta, ydelta);
+            xdelta = - this.Xspeed;
 
+            System.out.println("xdelta" + xdelta);
         }
+
+        this.body.setLinearVelocity(xdelta, ydelta);
     }
 
     public void render(SpriteBatch batch) {
@@ -96,9 +104,16 @@ public class Ball {
     }
 
 
-    public void setSpeed( float  speed) {
-        this.speed = speed;
+    public void setXSpeed( float  speed) {
+        this.Xspeed = speed;
     }
 
+    public void setYSpeed(float speed) {
+        this.YSpeed = speed;
+    }
+
+    public float getRadius() {
+        return radius;
+    }
 }
 

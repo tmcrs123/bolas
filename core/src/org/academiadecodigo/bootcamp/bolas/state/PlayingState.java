@@ -37,21 +37,23 @@ public class PlayingState extends State{
 
         super(manager);
 
-        this.camera = new OrthographicCamera(20,10);
+        this.camera = new OrthographicCamera(10,10);
         camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0f);
         this.camera.update();
 
         this.background = new Background(this.camera.viewportWidth);
 
         this.world = new World(GRAVITY, true);
+        this.ball = new Ball(this.world);
+        this.ball.setXSpeed(10);
+        this.ball.setYSpeed(10);
 
-        this.platform = new ComplexPlatform(10, 0.25f, 4, 0.5f,  world);
-        this.platform.setHoleWidth(0.1f);
+        this.platform = new ComplexPlatform(5, 0.25f, 10, 0.5f,  world);
+        this.platform.setHoleWidth(this.ball.getRadius() * 2 * 1.1f);
         this.platform.setHoleNumber(4);
         this.platform.constructPlatforms(world);
-        this.platform.setSpeed(0,1f);
+//        this.platform.setSpeed(0,1f);
 
-        this.ball = new Ball(this.world);
 
         debugRenderer = new Box2DDebugRenderer();
 
