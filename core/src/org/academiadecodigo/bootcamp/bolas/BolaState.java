@@ -10,27 +10,29 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.Ball;
+import org.academiadecodigo.bootcamp.bolas.gameobjects.PowerUp;
 import org.academiadecodigo.bootcamp.bolas.state.GameStateManager;
 import org.academiadecodigo.bootcamp.bolas.state.State;
 
 /**
  * Created by codecadet on 3/16/17.
  */
-public class BolaState extends State{
+public class BolaState extends State {
 
-    Ball ball;
+
+    private PowerUp speedUp;
     private OrthographicCamera camera;
     World world;
-
 
 
     public static final float CAMERA_VIEWFINDER_WIDTH_METERS = 40;
     public static final float CAMERA_VIEWFINDER_HEIGHT_METERS = 40;
 
 
-    public BolaState(GameStateManager gameStateManager){
+    public BolaState(GameStateManager gameStateManager) {
         super(gameStateManager);
         this.gameStateManager = new GameStateManager();
+        speedUp = new PowerUp(world);
 
     }
 
@@ -41,45 +43,14 @@ public class BolaState extends State{
 
     @Override
     public void update(float dt) {
-        world.step(1/60f, 6, 2);
+        world.step(1 / 60f, 6, 2);
 
     }
 
     @Override
     public void render(SpriteBatch batch) {
 
-        if ((ball.body.getPosition().y ) < ((ball.circle.getRadius()))){
-            ball.body.setLinearVelocity(0,0);
-            //ball.sprite.setPosition(0, 0);
-            //return;
-        } else {
-            System.out.println(ball.body.getPosition().y);
 
-            float xdelta = 0;
-            float ydelta = -4f;
-
-            ball.body.setLinearVelocity(0, ydelta);
-
-
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-                xdelta = 4f;
-                System.out.println("xdelta" + xdelta);
-                ball.body.setLinearVelocity(xdelta, ydelta);
-
-            }
-
-            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-                xdelta = -4f;
-                System.out.println("xdelta" + xdelta);
-                ball.body.setLinearVelocity(xdelta, ydelta);
-
-            }
-
-            ball.sprite.setPosition(ball.body.getPosition().x, ball.body.getPosition().y);
-            //sprite.setPosition(body.getPosition().x - sprite.getWidth()/2, body.getPosition().y - sprite.getHeight()/2);
-        }
-        //debugRenderer.render(world, camera.combined);
-        ball.sprite.draw(batch);
     }
 
     @Override
