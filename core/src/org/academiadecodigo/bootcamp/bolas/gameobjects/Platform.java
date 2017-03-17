@@ -1,17 +1,10 @@
 package org.academiadecodigo.bootcamp.bolas.gameobjects;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import org.academiadecodigo.bootcamp.bolas.state.testingstates.PlatformCollisionTestingState;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by codecadet on 3/16/17.
@@ -35,7 +28,7 @@ public class Platform {
         this.x = x;
         this.y = y;
 
-        this.sprite = new Sprite(new Texture(Gdx.files.internal("core/assets/images/bar.png")));
+        this.sprite = new Sprite(new Texture(Gdx.files.internal("core/assets/images/redbar.png")));
         this.sprite.setPosition(this.x , this.y );
         this.sprite.setSize(this.width , this.height );
         this.initializePhysics(world);

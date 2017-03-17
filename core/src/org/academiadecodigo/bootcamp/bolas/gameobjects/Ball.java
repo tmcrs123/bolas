@@ -2,6 +2,7 @@ package org.academiadecodigo.bootcamp.bolas.gameobjects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -32,6 +33,8 @@ public class Ball {
     private boolean canJump = true;
     private float joltY;
     private float maxHorizontalSpeed;
+
+    private Sound jumpSound;
 
     // Create a circle shape and set its radius to 6
 
@@ -73,6 +76,8 @@ public class Ball {
         body.createFixture(fixtureDef);
         body.setUserData(this);
 
+        jumpSound = Gdx.audio.newSound(Gdx.files.internal("core/assets/sound/sfx_laser1.ogg"));
+
     }
 
 
@@ -89,6 +94,7 @@ public class Ball {
 
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             if (this.canJump) {
+                jumpSound.play(5f);
                 ydelta = this.joltY;
             }
 
