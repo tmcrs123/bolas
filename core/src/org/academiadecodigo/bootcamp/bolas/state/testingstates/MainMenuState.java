@@ -13,7 +13,7 @@ import org.academiadecodigo.bootcamp.bolas.state.State;
 /**
  * Created by codecadet on 3/17/17.
  */
-public class MainMenuState extends State {
+public class MainMenuState extends State implements Input.TextInputListener {
 
 
     private Texture texture;
@@ -27,6 +27,8 @@ public class MainMenuState extends State {
     public MainMenuState(GameStateManager manager) {
 
         super(manager);
+
+
 
         texture = new Texture("core/assets/images/background.png");
         text = new Texture("core/assets/images/logo.png");
@@ -81,5 +83,15 @@ public class MainMenuState extends State {
         sprite.getTexture().dispose();
         logo.getTexture().dispose();
         start.getTexture().dispose();
+    }
+
+    @Override
+    public void input(String text) {
+        Gdx.input.getTextInput(new MainMenuState(gameStateManager),"O teu nome","Prostituta","o que ela grita durante o amor");
+    }
+
+    @Override
+    public void canceled() {
+
     }
 }

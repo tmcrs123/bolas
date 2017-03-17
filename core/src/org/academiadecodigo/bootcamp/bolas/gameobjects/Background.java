@@ -30,8 +30,6 @@ public class Background {
         score = 0;
 
         texture = new Texture("core/assets/images/background.png");
-
-
         textureScore1 = new Texture("core/assets/images/numeral0.png");
         textureScore2 = new Texture("core/assets/images/numeral0.png");
         textureScore3 = new Texture("core/assets/images/numeral0.png");

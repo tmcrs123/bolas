@@ -226,10 +226,8 @@ public class PlayingState extends State {
     }
 
     private void lostGame() {
-        
         gameStateManager.pop(this);
-        gameStateManager.push(new MainMenuState(gameStateManager));
-
+        gameStateManager.push(new GameOverState(gameStateManager,"Carlos",score));
     }
 
     @Override

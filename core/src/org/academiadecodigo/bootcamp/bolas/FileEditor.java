@@ -1,0 +1,29 @@
+package org.academiadecodigo.bootcamp.bolas;
+
+import java.io.*;
+
+/**
+ * Created by codecadet on 3/17/17.
+ */
+public class FileEditor {
+    public String Loader() throws IOException {
+        BufferedReader inputStream = new BufferedReader(new FileReader("highscores.txt")); //nao consigo passar file
+        String  totalLines = "";
+        String thisLine = null;
+        while ((thisLine = inputStream.readLine())!=null){
+            totalLines = totalLines.concat(thisLine);
+        }
+        inputStream.close();
+        return totalLines;
+    }
+
+    public void Writer(String playerName, int value)throws IOException{
+        BufferedWriter outputStream = new BufferedWriter(new FileWriter("/Users/codecadet/Documents/bolas/core/assets/highscores.txt")); //nao consigo passar file
+        outputStream.write(playerName);
+        outputStream.write(' ');
+        outputStream.write((int) value);
+        outputStream.flush();
+        outputStream.close();
+    }
+
+}
