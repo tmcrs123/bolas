@@ -30,16 +30,11 @@ public class Ball {
     private float x;
     private float y;
 
-    private boolean canJump = true;
+    private boolean canJump = false;
     private float joltY;
     private float maxHorizontalSpeed;
 
     private Sound oggSound;
-
-    // Create a circle shape and set its radius to 6
-
-
-    // Create our fixture and attach it to the body
 
 
     public Ball(float x, float y, float radius, World world){
@@ -88,7 +83,6 @@ public class Ball {
 
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             xdelta = this.joltX;
-//            System.out.println("xdelta" + xdelta);
 
         }
 
@@ -96,6 +90,7 @@ public class Ball {
             if (this.canJump) {
                 oggSound.play();
                 ydelta = this.joltY;
+                this.canJump = false;
             }
 
         }
@@ -104,16 +99,12 @@ public class Ball {
 
             xdelta = - this.joltX;
 
-            //System.out.println("xdelta" + xdelta);
         }
 
         this.body.applyForceToCenter(0, ydelta, true);
 
-        if (this.body.getLinearVelocity().x > this.maxHorizontalSpeed) {
-            return;
-        }
 
-        this.body.applyForceToCenter(xdelta, 0, true);
+        this.body.setLinearVelocity(xdelta, this.body.getLinearVelocity().y);
     }
 
     public void render(SpriteBatch batch) {

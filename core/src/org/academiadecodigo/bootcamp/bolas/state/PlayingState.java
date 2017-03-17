@@ -5,6 +5,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -21,7 +23,7 @@ import java.util.List;
  */
 public class PlayingState extends State {
 
-    public static final Vector2 GRAVITY = new Vector2(0, -75);
+    public static final Vector2 GRAVITY = new Vector2(0, -200);
 
     private static final float BALL_RADIUS = 0.5f;
     private static final float PLATFORMS_PER_HEIGHT = 4;
@@ -35,20 +37,29 @@ public class PlayingState extends State {
     private static final float PLATFORM_WIDTH = CAMERA_VIEWPOINT_WIDTH;
     private static final float PLATFORM_HEIGHT = CAMERA_VIEWPOINT_HEIGHT / 20;
 
+    private static final float PLATFORM_SPEEDUP_UNIT = 0.00001f;
+
     private static final float BOUNDARY_HEIGHT = CAMERA_VIEWPOINT_HEIGHT / PLATFORMS_PER_HEIGHT;
 
-    private static final float LIFE_COUNTER_Y = 19;
-    private static final float LIFE_COUNTER_X = 19;
+    private static final float LIFE_COUNTER_Y = CAMERA_VIEWPOINT_HEIGHT-1;
+    private static final float LIFE_COUNTER_X = 0;
 
     private static final float LIFE_COUNTER_WIDTH = 1;
 
-    private static final float BALL_JOLT_GRAV_MULT = 10;
+    private static final float BALL_HORIZ_JOLT = 20;
+    private static final float BALL_VERT_JOLT_GRAV_MULT = 10;
+
+    private static final float INITIAL_PLATFORM_VELOCITY = 5;
+    private static final float INITIAL_HOLE_RADIUS_MULT = 1.5f;
+    private static final int INITIAL_HOLE_AMOUNT = 2;
 
     private Background background;
     private Deque<ComplexPlatform> platforms;
     private World world;
     private Ball ball;
     private LifeCounter lifeCounter;
+    private Texture texture;
+    private Sprite sprite;
 
     private int playerLives;
 
@@ -59,8 +70,6 @@ public class PlayingState extends State {
     private int holeAmount;
 
     private float backgroundDelay;
-
-    private PowerUp speedUp;
 
     Box2DDebugRenderer debugRenderer;
     private int score;
@@ -75,28 +84,27 @@ public class PlayingState extends State {
 
         super(manager);
 
+        this.contactListener = new PlatformBallContactListener();
+
+        texture = new Texture("core/assets/images/heart.png");
+        sprite = new Sprite(texture);
+
         this.initializeLifeCounter();
 
-        this.camera = new OrthographicCamera(CAMERA_VIEWPOINT_WIDTH, CAMERA_VIEWPOINT_HEIGHT);
-        camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0f);
-        this.camera.update();
+        this.initializeCamera();
 
         this.background = new Background(this.camera.viewportWidth, this.camera.viewportHeight);
         this.backgroundDelay = 1;
 
         this.world = new World(GRAVITY, true);
 
+        this.ballSpeed = 10;
         this.initializeBall();
 
         this.platforms = new LinkedList<>();
-        this.platformSpeed = 5;
-        this.holeSizeMultiplier = 1.2f;
-        this.holeAmount = 2;
 
         this.initializePlatformList();
 
-
-        this.contactListener = new PlatformBallContactListener(this.platforms, this.ball);
         this.world.setContactListener(this.contactListener);
 
 
@@ -110,22 +118,35 @@ public class PlayingState extends State {
 
     }
 
+    private void initializeCamera() {
+        this.camera = new OrthographicCamera(CAMERA_VIEWPOINT_WIDTH, CAMERA_VIEWPOINT_HEIGHT);
+        camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0f);
+        this.camera.update();
+    }
+
     private void initializeLifeCounter() {
         this.playerLives = 0;
         this.lifeCounter = new LifeCounter(LIFE_COUNTER_X, LIFE_COUNTER_Y, LIFE_COUNTER_WIDTH, LIFE_COUNTER_WIDTH);
         this.lifeCounter.setLives(this.playerLives);
+        this.sprite.setSize(LIFE_COUNTER_WIDTH,LIFE_COUNTER_WIDTH);
+        this.sprite.setPosition(LIFE_COUNTER_X + LIFE_COUNTER_WIDTH ,LIFE_COUNTER_Y);
     }
 
     private void initializeBall() {
         this.ball = new Ball(INITIAL_BALL_SPAWN_X, INITIAL_BALL_SPAWN_Y, BALL_RADIUS, this.world);
-        this.ballSpeed = 20;
-        this.ball.setHorizontalJolt(this.ballSpeed);
-        this.ball.setMaxHorizontalSpeed(20);
-        this.ball.setVerticalJolt(GRAVITY.y * -BALL_JOLT_GRAV_MULT);
+        this.ball.setHorizontalJolt(BALL_HORIZ_JOLT);
+        this.ball.setMaxHorizontalSpeed(this.ballSpeed);
+        this.ball.setVerticalJolt(GRAVITY.y * -BALL_VERT_JOLT_GRAV_MULT);
+        this.contactListener.setBall(this.ball);
+
     }
 
 
     private void initializePlatformList() {
+
+        this.platformSpeed = INITIAL_PLATFORM_VELOCITY;
+        this.holeSizeMultiplier = INITIAL_HOLE_RADIUS_MULT;
+        this.holeAmount = INITIAL_HOLE_AMOUNT;
 
         for (int i = 0; i < PLATFORMS_PER_HEIGHT + 1; i++) {
 
@@ -139,6 +160,7 @@ public class PlayingState extends State {
             this.platforms.add(pla);
         }
 
+        this.contactListener.setPlatforms(this.platforms);
 
     }
 
@@ -162,14 +184,16 @@ public class PlayingState extends State {
 
         background.move(dt, (int) this.backgroundDelay);
 
-        if(score % 1000 == 0 ){
-            System.out.println("SPEED UP YOU FUCK");
+//        if( ((int) Math.log10(score)) % 3 == 0 ){
+//            System.out.println(((int) Math.log10(score)));
+            platformSpeed += PLATFORM_SPEEDUP_UNIT * score;
+//            System.out.println("SPEED UP YOU FUCK");
             for(ComplexPlatform plat : platforms){
-                plat.setSpeed(0,platformSpeed+1f);
+                plat.setSpeed(0,platformSpeed);
             }
-            platformSpeed += 0.5f;
-        }
+//        }
 
+        score++;
 
 
     }
@@ -179,14 +203,13 @@ public class PlayingState extends State {
 
         camera.update();
         batch.setProjectionMatrix(camera.combined);
-        score++;
 
-        background.render(batch);
-
+        this.background.setScore(this.score);
+        this.background.render(batch);
 
         this.checkForPlatformDeletion();
         this.renderPlatforms(batch);
-
+        this.sprite.draw(batch);
         this.renderBall(batch);
 
         this.renderLifeCounter(batch);
@@ -296,6 +319,7 @@ public class PlayingState extends State {
             cp.dispose();
         }
 
+        this.lifeCounter.dispose();
         this.ball.dispose();
     }
 

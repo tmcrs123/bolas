@@ -19,9 +19,7 @@ public class PlatformBallContactListener implements ContactListener {
     private Sound fallSound;
 
 
-    public PlatformBallContactListener(Deque<ComplexPlatform> platforms, Ball ball) {
-        this.platforms = platforms;
-        this.ball = ball;
+    public PlatformBallContactListener() {
         fallSound = Gdx.audio.newSound(Gdx.files.internal("core/assets/sound/sfx_twoTone.ogg"));
     }
 
@@ -98,5 +96,13 @@ public class PlatformBallContactListener implements ContactListener {
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
 
+    }
+
+    public void setBall(Ball ball) {
+        this.ball = ball;
+    }
+
+    public void setPlatforms(Deque<ComplexPlatform> platforms) {
+        this.platforms = platforms;
     }
 }
