@@ -29,7 +29,7 @@ public class Ball {
     private float x;
     private float y;
 
-    private boolean canJump = true;
+    private boolean canJump = false;
     private float joltY;
     private float maxHorizontalSpeed;
 
@@ -90,6 +90,7 @@ public class Ball {
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             if (this.canJump) {
                 ydelta = this.joltY;
+                this.canJump = false;
             }
 
         }
@@ -103,11 +104,11 @@ public class Ball {
 
         this.body.applyForceToCenter(0, ydelta, true);
 
-        if (this.body.getLinearVelocity().x > this.maxHorizontalSpeed) {
-            return;
-        }
+//        if (Math.abs(this.body.getLinearVelocity().x) > this.maxHorizontalSpeed) {
+//            return;
+//        }
 
-        this.body.applyForceToCenter(xdelta, 0, true);
+        this.body.setLinearVelocity(xdelta, this.body.getLinearVelocity().y);
     }
 
     public void render(SpriteBatch batch) {

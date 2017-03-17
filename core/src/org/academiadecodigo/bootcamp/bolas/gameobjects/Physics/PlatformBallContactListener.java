@@ -16,10 +16,10 @@ public class PlatformBallContactListener implements ContactListener {
     private Ball ball;
 
 
-    public PlatformBallContactListener(Deque<ComplexPlatform> platforms, Ball ball) {
-        this.platforms = platforms;
-        this.ball = ball;
-    }
+//    public PlatformBallContactListener(Deque<ComplexPlatform> platforms, Ball ball) {
+//        this.platforms = platforms;
+//        this.ball = ball;
+//    }
 
     @Override
     public void beginContact(Contact contact) {
@@ -93,5 +93,13 @@ public class PlatformBallContactListener implements ContactListener {
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
 
+    }
+
+    public void setBall(Ball ball) {
+        this.ball = ball;
+    }
+
+    public void setPlatforms(Deque<ComplexPlatform> platforms) {
+        this.platforms = platforms;
     }
 }
