@@ -153,7 +153,7 @@ public class Ball {
     }
 
     public Sprite getSprite() {
-        return this.getSprite();
+        return this.sprite;
     }
 
 }

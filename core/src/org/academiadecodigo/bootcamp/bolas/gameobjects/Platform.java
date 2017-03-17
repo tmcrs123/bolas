@@ -64,7 +64,6 @@ public class Platform {
         body.setUserData(this);
 
 
-
     }
 
     public void render(SpriteBatch batch) {
