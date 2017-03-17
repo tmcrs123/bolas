@@ -2,11 +2,14 @@ package org.academiadecodigo.bootcamp.bolas.state;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
-
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Timer;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.*;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.Physics.PlatformBallContactListener;
 import org.academiadecodigo.bootcamp.bolas.state.testingstates.MainMenuState;
@@ -66,6 +69,12 @@ public class PlayingState extends State {
 
     private PlatformBallContactListener contactListener;
 
+    private Music oggMusic;
+    private Sound oggSound;
+
+    private final float taskTime = 10f;
+    private Timer timer;
+
 
     public PlayingState(GameStateManager manager) {
 
@@ -97,6 +106,13 @@ public class PlayingState extends State {
 
 
         debugRenderer = new Box2DDebugRenderer();
+
+        oggMusic = Gdx.audio.newMusic(Gdx.files.internal("core/assets/sound/Undertale - Megalovania.ogg"));
+        oggMusic.play();
+
+        oggSound = Gdx.audio.newSound(Gdx.files.internal("core/assets/sound/sfx_lose.ogg"));
+
+        timer =  new Timer();
 
     }
 
@@ -151,6 +167,16 @@ public class PlayingState extends State {
         world.step(dt, 6, 2);
 
         background.move(dt, (int) this.backgroundDelay);
+
+        if(score % 1000 == 0 ){
+            System.out.println("SPEED UP YOU FUCK");
+            for(ComplexPlatform plat : platforms){
+                plat.setSpeed(0,platformSpeed+1f);
+            }
+            platformSpeed += 0.5f;
+        }
+
+
 
     }
 
@@ -224,7 +250,9 @@ public class PlayingState extends State {
         ComplexPlatform newCp = new ComplexPlatform(cp.getX(), -cp.getHeight() / 2, cp.getWidth(), cp.getHeight(), cp.getBoundaryHeight());
         newCp.setHoleWidth(cp.getHoleWidth());
 
-        newCp.setHoleNumber(cp.getHoleNumber());
+        int random = (int) Math.floor(Math.random() * 3)+1;
+
+        newCp.setHoleNumber(random);
 
         newCp.constructPlatforms(this.world);
         newCp.setSpeed(cp.getSpeedX(), cp.getSpeedY());
@@ -260,6 +288,8 @@ public class PlayingState extends State {
 
     private void lostGame() {
 
+        oggMusic.stop();
+        oggSound.play(5f);
         gameStateManager.pop(this);
         gameStateManager.push(new GameOverState(gameStateManager,"Carlos",score));
     }
