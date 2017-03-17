@@ -2,17 +2,12 @@ package org.academiadecodigo.bootcamp.bolas;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Box2D;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.World;
 import org.academiadecodigo.bootcamp.bolas.state.GameStateManager;
-import org.academiadecodigo.bootcamp.bolas.state.PlayingState;
-import org.academiadecodigo.bootcamp.bolas.state.testingstates.PlatformCollisionTestingState;
-import org.academiadecodigo.bootcamp.bolas.state.testingstates.PlatformTestingState;
+import org.academiadecodigo.bootcamp.bolas.state.testingstates.MainMenuState;
 
 public class Bolas extends Game {
 	SpriteBatch batch;
@@ -31,7 +26,7 @@ public class Bolas extends Game {
 
 		img = new Texture("core/assets/images/ball.png");
 		this.manager = new GameStateManager();
-		this.manager.push(new PlayingState(this.manager));
+		this.manager.push(new MainMenuState(this.manager));
 	}
 
 	@Override
