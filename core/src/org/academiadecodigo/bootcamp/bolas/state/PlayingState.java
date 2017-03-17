@@ -43,6 +43,7 @@ public class PlayingState extends State {
     private float platformSpeed;
 
     private float holeSizeMultiplier;
+    private int holeAmount;
 
     private float backgroundDelay;
 
@@ -69,15 +70,17 @@ public class PlayingState extends State {
         this.world = new World(GRAVITY, true);
         this.ball = new Ball(INITIAL_BALL_SPAWN_X, INITIAL_BALL_SPAWN_Y, BALL_RADIUS, this.world);
 
-        this.ballSpeed = 10;
+        this.ballSpeed = 20;
 
-        this.ball.setHorizontalSpeed(this.ballSpeed);
+        this.ball.setHorizontalJolt(this.ballSpeed);
+        this.ball.setMaxHorizontalSpeed(20);
         this.ball.setVerticalJolt(GRAVITY.y * -10);
 
 
         this.platforms = new LinkedList<>();
         this.platformSpeed = 5;
-        this.holeSizeMultiplier = 1.3f;
+        this.holeSizeMultiplier = 1.5f;
+        this.holeAmount = 2;
 
         this.initializePlatformList();
 
@@ -96,7 +99,7 @@ public class PlayingState extends State {
 
             ComplexPlatform pla = new ComplexPlatform(10, i * camera.viewportHeight / PLATFORMS_PER_HEIGHT, 10, BOUNDARY_THICKNESS, camera.viewportHeight / PLATFORMS_PER_HEIGHT);
             pla.setHoleWidth(this.ball.getRadius() * 2 * this.holeSizeMultiplier);
-            pla.setHoleNumber(3);
+            pla.setHoleNumber(this.holeAmount);
             pla.constructPlatforms(world);
 
             pla.setSpeed(0, this.platformSpeed);

@@ -29,8 +29,6 @@ public class Platform {
 
     private float rotation;
 
-    private float speed;
-
     public Platform(float x, float y, float width, float height, World world ) {
         this.height = height;
         this.width = width;
