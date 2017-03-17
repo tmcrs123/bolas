@@ -9,10 +9,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Timer;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.*;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.Physics.PlatformBallContactListener;
-import org.academiadecodigo.bootcamp.bolas.state.testingstates.MainMenuState;
 
 import java.util.Deque;
 import java.util.LinkedList;
@@ -72,9 +70,6 @@ public class PlayingState extends State {
     private Music oggMusic;
     private Sound oggSound;
 
-    private final float taskTime = 10f;
-    private Timer timer;
-
 
     public PlayingState(GameStateManager manager) {
 
@@ -112,7 +107,6 @@ public class PlayingState extends State {
 
         oggSound = Gdx.audio.newSound(Gdx.files.internal("core/assets/sound/sfx_lose.ogg"));
 
-        timer =  new Timer();
 
     }
 
@@ -268,6 +262,7 @@ public class PlayingState extends State {
 
         if (this.ball.getY() > camera.viewportHeight || this.ball.getY() < 0) {
             this.playerLives--;
+            oggSound.play();
             this.ball.dispose();
 
             this.initializeBall();
