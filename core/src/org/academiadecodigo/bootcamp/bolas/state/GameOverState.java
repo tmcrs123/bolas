@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import org.academiadecodigo.bootcamp.bolas.FileEditor;
+import org.academiadecodigo.bootcamp.bolas.state.testingstates.MainMenuState;
 
 import java.io.IOException;
 
@@ -75,7 +76,7 @@ public class GameOverState extends State implements Input.TextInputListener {
             }
 
             gameStateManager.pop(this);
-            gameStateManager.push(new PlayingState(gameStateManager));
+            gameStateManager.push(new MainMenuState(gameStateManager));
             return;
         }
 
