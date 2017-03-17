@@ -101,7 +101,7 @@ public class PlayingState extends State {
     }
 
     private void initializeLifeCounter() {
-        this.playerLives = 3;
+        this.playerLives = 0;
         this.lifeCounter = new LifeCounter(LIFE_COUNTER_X, LIFE_COUNTER_Y, LIFE_COUNTER_WIDTH, LIFE_COUNTER_WIDTH);
         this.lifeCounter.setLives(this.playerLives);
     }
@@ -261,7 +261,7 @@ public class PlayingState extends State {
     private void lostGame() {
 
         gameStateManager.pop(this);
-        gameStateManager.push(new GameOverState(gameStateManager,"Carlos",score));
+        gameStateManager.push(new GameOverState(gameStateManager,score));
     }
 
     @Override

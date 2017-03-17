@@ -13,16 +13,20 @@ import java.io.IOException;
 /**
  * Created by codecadet on 3/17/17.
  */
-public class GameOverState extends State{
+public class GameOverState extends State implements Input.TextInputListener {
 
     private Sprite sprite;
     private Texture img;
+    private String name;
+    private FileEditor fileEditor;
+    private int score;
 
 
-    public GameOverState(GameStateManager gameStateManager,String playerName, int score){
+    public GameOverState(GameStateManager gameStateManager, int score){
         super(gameStateManager);
-        FileEditor fileEditor = new FileEditor();
+        fileEditor = new FileEditor();
         img = new Texture("core/assets/images/logo.png");
+        this.score = score;
 
         this.camera = new OrthographicCamera(20,20);
         camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0f);
@@ -36,12 +40,6 @@ public class GameOverState extends State{
         this.sprite = new Sprite(img);
         this.sprite.setSize(20,20);
 
-
-        try {
-            fileEditor.Writer(playerName,score);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 
@@ -50,10 +48,24 @@ public class GameOverState extends State{
     @Override
     public void handleInput() {
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
+        //enter e só com enter
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
+            Gdx.input.getTextInput(this,"Let me save your score!","","Enter your name.");
+        }
+
+
+        while (name != null) {
+            try {
+                fileEditor.Writer(name,String.valueOf(score));
+                System.out.println(fileEditor.Loader());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             gameStateManager.pop(this);
             gameStateManager.push(new PlayingState(gameStateManager));
-
+            return;
         }
 
     }
@@ -70,10 +82,24 @@ public class GameOverState extends State{
         batch.setProjectionMatrix(camera.combined);
         sprite.draw(batch);
 
+
+
     }
 
     @Override
     public void dispose() {
+
+    }
+
+    @Override
+    public void input(String text) {
+        this.name = text;
+
+    }
+
+    @Override
+    public void canceled() {
+        name = "";
 
     }
 }
