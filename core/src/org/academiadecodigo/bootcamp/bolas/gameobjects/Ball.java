@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.physics.box2d.*;
 
 /**
@@ -12,18 +13,24 @@ import com.badlogic.gdx.physics.box2d.*;
  */
 public class Ball {
 
+    public static final float BALL_DENSITY = 1;
+    public static final float BALL_FRICTION = 1;
+
+
     private CircleShape circle;
     private Sprite sprite;
     private Body body;
     private BodyDef bodyDef;
 
     private float Xspeed;
-    private float YSpeed;
 
     private float radius;
 
     private float x;
     private float y;
+
+    private boolean canJump = true;
+    private float jolt;
 
     // Create a circle shape and set its radius to 6
 
@@ -58,9 +65,12 @@ public class Ball {
         // Create a fixture definition to apply our shape to
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = circle;
-        fixtureDef.density = 1f;
-        fixtureDef.friction = 1f;
+        fixtureDef.density = BALL_DENSITY;
+        fixtureDef.friction = BALL_FRICTION;
+        fixtureDef.restitution = 0.00001f;
         body.createFixture(fixtureDef);
+        body.setUserData(this);
+
     }
 
 
@@ -71,15 +81,16 @@ public class Ball {
 
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             xdelta = this.Xspeed;
-            System.out.println("xdelta" + xdelta);
+//            System.out.println("xdelta" + xdelta);
 
         }
 
-//        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-//            xdelta = this.Xspeed;
-//            System.out.println("xdelta" + xdelta);
-//
-//        }
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            if (this.canJump) {
+                ydelta = this.jolt;
+            }
+
+        }
 
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             xdelta = - this.Xspeed;
@@ -87,7 +98,7 @@ public class Ball {
             //System.out.println("xdelta" + xdelta);
         }
 
-        this.body.setLinearVelocity(xdelta, ydelta);
+        this.body.applyForceToCenter(xdelta, ydelta, true);
     }
 
     public void render(SpriteBatch batch) {
@@ -104,9 +115,12 @@ public class Ball {
     }
 
 
-    public void setSpeed( float  xspeed, float yspeed) {
-        this.Xspeed = xspeed;
-        this.YSpeed = yspeed;
+    public void setHorizontalSpeed(float speed) {
+        this.Xspeed = speed;
+    }
+
+    public void setVerticalJolt(float jolt) {
+        this.jolt = jolt;
     }
 
 
@@ -124,6 +138,14 @@ public class Ball {
 
     public void dispose() {
         this.sprite.getTexture().dispose();
+    }
+
+    public void setCanJump(boolean input) {
+        this.canJump = input;
+    }
+
+    public Body getBody() {
+        return this.body;
     }
 
 }

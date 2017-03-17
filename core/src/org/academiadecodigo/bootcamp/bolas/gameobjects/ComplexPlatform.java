@@ -201,4 +201,19 @@ public class ComplexPlatform {
     public float getSpeedY() {
         return this.speedY;
     }
+
+
+    public List<Platform> getHorizontalPlatforms() {
+
+        List<Platform> result = new LinkedList<>();
+
+        if (this.platforms.size() < 3) {
+            return new LinkedList<>();
+        }
+
+        return result;
+
+
+    }
+
 }

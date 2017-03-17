@@ -9,59 +9,76 @@ import com.badlogic.gdx.physics.box2d.*;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.Background;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.Ball;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.ComplexPlatform;
+import org.academiadecodigo.bootcamp.bolas.gameobjects.Physics.PlatformBallContactListener;
 import org.academiadecodigo.bootcamp.bolas.state.testingstates.MainMenuState;
 
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
+
 /**
  * Created by codecadet on 3/16/17.
  */
-public class PlayingState extends State{
+public class PlayingState extends State {
 
-    public static final Vector2 GRAVITY = new Vector2(0, -100);
+    public static final Vector2 GRAVITY = new Vector2(0, -20);
 
-    private static final float BALL_RADIUS = 0.5f ;
+    private static final float BALL_RADIUS = 0.5f;
     private static final float PLATFORMS_PER_HEIGHT = 4;
     private static final float BOUNDARY_THICKNESS = 0.1f;
     private static final float INITIAL_BALL_SPAWN_X = 10;
-    private static final float INITIAL_BALL_SPAWN_Y = 18;
+    private static final float INITIAL_BALL_SPAWN_Y = 12;
 
-    private float delay = 1;
+    private static final float CAMERA_VIEWPOINT_WIDTH = 20;
+    private static final float CAMERA_VIEWPOINT_HEIGHT = 20;
+
     private Background background;
-
-    private ComplexPlatform platform;
-    private ComplexPlatform platform2;
+    private Deque<ComplexPlatform> platforms;
     private World world;
     private Ball ball;
+
     private float ballSpeed;
+    private float platformSpeed;
+
+    private float holeSizeMultiplier;
+
+    private float backgroundDelay;
 
     Box2DDebugRenderer debugRenderer;
 
-    private Deque<ComplexPlatform> platforms;
+    private PlatformBallContactListener contactListener;
+
 
 
     public PlayingState(GameStateManager manager) {
 
         super(manager);
 
-        this.camera = new OrthographicCamera(20,20);
-        camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0f);
+        this.camera = new OrthographicCamera(CAMERA_VIEWPOINT_WIDTH, CAMERA_VIEWPOINT_HEIGHT);
+        camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0f);
         this.camera.update();
 
         this.background = new Background(this.camera.viewportWidth, this.camera.viewportHeight);
+        this.backgroundDelay = 1;
 
         this.world = new World(GRAVITY, true);
         this.ball = new Ball(INITIAL_BALL_SPAWN_X, INITIAL_BALL_SPAWN_Y, BALL_RADIUS, this.world);
 
         this.ballSpeed = 10;
 
-        this.ball.setSpeed(this.ballSpeed, this.ballSpeed);
+        this.ball.setHorizontalSpeed(this.ballSpeed);
+        this.ball.setVerticalJolt(GRAVITY.y * -10);
 
 
         this.platforms = new LinkedList<>();
+        this.platformSpeed = 5;
+        this.holeSizeMultiplier = 1.3f;
+
         this.initializePlatformList();
 
+
+        this.contactListener = new PlatformBallContactListener(this.platforms, this.ball);
+        this.world.setContactListener(this.contactListener);
 
         debugRenderer = new Box2DDebugRenderer();
 
@@ -70,14 +87,14 @@ public class PlayingState extends State{
 
     private void initializePlatformList() {
 
-        for (int i = 1;  i <= PLATFORMS_PER_HEIGHT-1 ; i++ ) {
+        for (int i = 1; i <= PLATFORMS_PER_HEIGHT - 1; i++) {
 
-            ComplexPlatform pla= new ComplexPlatform(10, i * camera.viewportHeight / PLATFORMS_PER_HEIGHT, 10, BOUNDARY_THICKNESS, camera.viewportHeight/ PLATFORMS_PER_HEIGHT);
-            pla.setHoleWidth(this.ball.getRadius() * 2 * 1.1f);
+            ComplexPlatform pla = new ComplexPlatform(10, i * camera.viewportHeight / PLATFORMS_PER_HEIGHT, 10, BOUNDARY_THICKNESS, camera.viewportHeight / PLATFORMS_PER_HEIGHT);
+            pla.setHoleWidth(this.ball.getRadius() * 2 * this.holeSizeMultiplier);
             pla.setHoleNumber(3);
             pla.constructPlatforms(world);
 
-            pla.setSpeed(0,5f);
+            pla.setSpeed(0, this.platformSpeed);
 
             this.platforms.add(pla);
         }
@@ -89,10 +106,9 @@ public class PlayingState extends State{
     @Override
     public void handleInput() {
 
-        if(!Gdx.input.isKeyJustPressed(Input.Keys.P) && Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)){
+        if (!Gdx.input.isKeyJustPressed(Input.Keys.P) && Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
             this.background.start();
-        }
-        else if(Gdx.input.isKeyJustPressed(Input.Keys.P)){
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
             this.background.stop();
         }
 
@@ -104,7 +120,7 @@ public class PlayingState extends State{
     public void update(float dt) {
         world.step(dt, 6, 2);
 
-        background.move(dt, (int) this.delay);
+        background.move(dt, (int) this.backgroundDelay);
 
     }
 
@@ -137,7 +153,7 @@ public class PlayingState extends State{
         List<ComplexPlatform> copyPlats = new LinkedList<>(this.platforms);
 
         for (int i = 0; i < copyPlats.size(); i++) {
-            System.out.println(copyPlats.get(i).getY());
+//            System.out.println(copyPlats.get(i).getY());
 
             if (copyPlats.get(i).getY() > camera.viewportHeight) {
                 copyPlats.get(i).dispose();
@@ -168,12 +184,11 @@ public class PlayingState extends State{
     }
 
 
-
     public ComplexPlatform constructSimilarComplexPlatform(ComplexPlatform cp) {
-        ComplexPlatform newCp = new ComplexPlatform(cp.getX(), -cp.getHeight()/2, cp.getWidth(), cp.getHeight(), camera.viewportHeight/4);
+        ComplexPlatform newCp = new ComplexPlatform(cp.getX(), -cp.getHeight() / 2, cp.getWidth(), cp.getHeight(), camera.viewportHeight / 4);
         newCp.setHoleWidth(cp.getHoleWidth());
 
-        newCp.setHoleNumber( cp.getHoleNumber() );
+        newCp.setHoleNumber(cp.getHoleNumber());
 
         newCp.constructPlatforms(this.world);
         newCp.setSpeed(cp.getSpeedX(), cp.getSpeedY());
@@ -212,8 +227,5 @@ public class PlayingState extends State{
         this.ball.dispose();
     }
 
-    public void setDelay(float dt) {
-        this.delay = dt;
-    }
 
 }

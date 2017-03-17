@@ -61,6 +61,7 @@ public class Platform {
 
         body.createFixture(fixtureDef);
         body.setGravityScale(0);
+        body.setUserData(this);
 
 
 
@@ -70,7 +71,7 @@ public class Platform {
 
 
         this.sprite.setPosition(this.x  - this.width * 0.5f , this.y - this.height * 0.5f );
-        System.out.println(this.rotation);
+//        System.out.println(this.rotation);
         this.sprite.setRotation(this.rotation);
         this.sprite.draw(batch);
 
@@ -78,7 +79,7 @@ public class Platform {
         this.y = this.body.getPosition().y;
         this.rotation = this.body.getAngle();
 
-        System.out.println(this.body.getPosition());
+//        System.out.println(this.body.getPosition());
 
     }
 
@@ -112,7 +113,10 @@ public class Platform {
 
     public float getY() {
         return this.body.getPosition().y;
+    }
 
 
+    public Body getBody() {
+        return this.getBody();
     }
 }
