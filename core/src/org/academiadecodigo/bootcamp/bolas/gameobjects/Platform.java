@@ -87,13 +87,14 @@ public class Platform {
         this.body.setLinearVelocity(newSpeedX,newSpeedY);
     }
 
-    public boolean isOutsideBoundaries(int x0, int y0, int xf, int yf) {
-        return this.body.getPosition().x > xf || this.body.getPosition().y > yf ||
-                this.body.getPosition().x < x0 || this.body.getPosition().y < y0;
-    }
+//    public boolean isOutsideBoundaries(float x0, float y0, float xf, float yf) {
+//        return this.body.getPosition().x > xf || this.body.getPosition().y > yf ||
+//                this.body.getPosition().x < x0 || this.body.getPosition().y < y0;
+//    }
 
     public void dispose() {
         this.sprite.getTexture().dispose();
+        this.body.destroyFixture(this.body.getFixtureList().get(0));
     }
 
 
@@ -106,10 +107,12 @@ public class Platform {
     }
 
     public float getX() {
-        return x;
+        return this.body.getPosition().x;
     }
 
     public float getY() {
-        return y;
+        return this.body.getPosition().y;
+
+
     }
 }

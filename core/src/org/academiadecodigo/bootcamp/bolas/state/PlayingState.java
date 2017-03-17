@@ -6,16 +6,14 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.physics.bullet.collision.Collision;
-import com.badlogic.gdx.physics.bullet.collision.ContactListener;
-import com.sun.tools.javac.code.Attribute;
-import com.sun.tools.javac.util.Constants;
+
 import org.academiadecodigo.bootcamp.bolas.gameobjects.Background;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.Ball;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.ComplexPlatform;
-import org.academiadecodigo.bootcamp.bolas.gameobjects.Platform;
-import org.academiadecodigo.bootcamp.bolas.gameobjects.PowerUp;
 
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.List;
 /**
  * Created by codecadet on 3/16/17.
  */
@@ -23,11 +21,9 @@ public class PlayingState extends State{
 
     public static final Vector2 GRAVITY = new Vector2(0, 0);
 
-    private float x;
-    private float y;
-    private boolean start;
+    private static final float BALL_RADIUS = 0.5f ;
+
     private float delay = 1;
-    private int speed = 0;
     private Background background;
 
     private ComplexPlatform platform;
@@ -36,31 +32,38 @@ public class PlayingState extends State{
     private PowerUp speedUp;
     Box2DDebugRenderer debugRenderer;
 
+    private Deque<ComplexPlatform> platforms;
+
+    private boolean add;
+
 
     public PlayingState(GameStateManager manager) {
 
         super(manager);
 
-        this.camera = new OrthographicCamera(20,10);
+        this.camera = new OrthographicCamera(20,20);
         camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0f);
         this.camera.update();
 
-        this.background = new Background(this.camera.viewportWidth);
+        this.background = new Background(this.camera.viewportWidth, this.camera.viewportHeight);
 
         this.world = new World(GRAVITY, true);
+        this.ball = new Ball(10, 18, BALL_RADIUS, this.world);
+        this.ball.setXSpeed(10);
+        this.ball.setYSpeed(10);
 
-        this.platform = new ComplexPlatform(10, 0.25f, 4, 0.5f,  world);
-        this.platform.setHoleWidth(0.1f);
-        this.platform.setHoleNumber(4);
+        this.platform = new ComplexPlatform(10, 2.25f, 10, 0.5f, camera.viewportHeight/4,  world);
+        this.platform.setHoleWidth(this.ball.getRadius() * 2 * 1.1f);
+        this.platform.setHoleNumber(3);
         this.platform.constructPlatforms(world);
-        this.platform.setSpeed(0,1f);
 
+        this.platform.setSpeed(0,5f);
 
-
-        this.speedUp = new PowerUp(5.0f, 2.5f, 1f, 1f, world);
-        this.ball = new Ball(this.world);
+        this.platforms = new LinkedList<>();
+        this.platforms.add(this.platform);
 
         debugRenderer = new Box2DDebugRenderer();
+        this.add = true;
 
     }
 
@@ -100,16 +103,101 @@ public class PlayingState extends State{
         }
 
         background.render(batch);
-        this.platform.render(batch);
-        this.ball.render(batch);
-        this.speedUp.render(batch);
-        this.debugRenderer.render(world, camera.combined);
 
+        this.checkForPlatformDeletion();
+        this.renderComplex(batch);
+
+        this.renderBall(batch);
+
+//        this.debugRenderer.render (world,camera.combined);
+
+    }
+
+    private void renderComplex(SpriteBatch batch) {
+
+        for (ComplexPlatform cp : this.platforms) {
+            cp.render(batch);
+        }
+    }
+
+    private void checkForPlatformDeletion() {
+
+        List<ComplexPlatform> copyPlats = new LinkedList<>(this.platforms);
+
+        for (int i = 0; i < copyPlats.size(); i++) {
+            System.out.println(copyPlats.get(i).getY());
+
+            if (copyPlats.get(i).getY() > camera.viewportHeight) {
+                copyPlats.get(i).dispose();
+                this.platforms.remove(copyPlats.get(i));
+                continue;
+            }
+
+            if (copyPlats.get(i).getY() > camera.viewportHeight / 4) {
+
+                ComplexPlatform platform = null;
+
+                for (ComplexPlatform d : copyPlats) {
+                    if (d.getY() < copyPlats.get(i).getY()) {
+                        platform = d;
+                    }
+                }
+
+                if (platform != null) {
+                    continue;
+                }
+
+                ComplexPlatform newCp = this.constructSimilarComplexPlatform(copyPlats.get(i));
+                this.platforms.add(newCp);
+
+            }
+
+        }
+    }
+
+
+
+    public ComplexPlatform constructSimilarComplexPlatform(ComplexPlatform cp) {
+        ComplexPlatform newCp = new ComplexPlatform(cp.getX(), -cp.getHeight()/2, cp.getWidth(), cp.getHeight(), camera.viewportHeight/4);
+        newCp.setHoleWidth(cp.getHoleWidth());
+
+        newCp.setHoleNumber( cp.getHoleNumber() );
+
+        newCp.constructPlatforms(this.world);
+        newCp.setSpeed(cp.getSpeedX(), cp.getSpeedY());
+        return newCp;
+    }
+
+
+    private void renderBall(SpriteBatch batch) {
+
+        if (this.ball == null) {
+            return;
+        }
+
+        if (this.ball.getY() > camera.viewportHeight) {
+            this.dispose();
+            this.lostGame();
+            return;
+        }
+
+
+        this.ball.render(batch);
+
+    }
+
+    private void lostGame() {
+       System.exit(0);
     }
 
     @Override
     public void dispose() {
-        this.platform.dispose();
+
+        for (ComplexPlatform cp : this.platforms) {
+            cp.dispose();
+        }
+
+        this.ball.dispose();
     }
 
     public void setDelay(float dt) {

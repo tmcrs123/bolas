@@ -34,7 +34,7 @@ public class BolaState extends State {
         super(gameStateManager);
         this.gameStateManager = new GameStateManager();
         World world = new World(GRAVITY,true);
-        speedUp = new PowerUp(10,10,2,3,world);
+        speedUp = new PowerUp(10,10,2,2,world);
         this.camera = new OrthographicCamera(40,40);
         camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0f);
         this.camera.update();
