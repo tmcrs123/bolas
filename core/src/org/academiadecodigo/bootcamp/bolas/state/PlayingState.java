@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.bullet.collision.ContactListener;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.Background;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.Ball;
 import org.academiadecodigo.bootcamp.bolas.gameobjects.Platform;
+import org.academiadecodigo.bootcamp.bolas.gameobjects.PowerUp;
 
 /**
  * Created by codecadet on 3/16/17.
@@ -29,6 +30,7 @@ public class PlayingState extends State implements com.badlogic.gdx.physics.box2
     private Platform platform;
     private World world;
     private Ball ball;
+    private PowerUp speedUp;
     Box2DDebugRenderer debugRenderer;
 
 
@@ -48,6 +50,8 @@ public class PlayingState extends State implements com.badlogic.gdx.physics.box2
         this.platform = new Platform(5, 0.25f, 10, 0.5f, world);
         this.platform.setSpeed(0,1f);
 
+
+        this.speedUp = new PowerUp(5.0f, 2.5f, 2f, 2f, world);
         this.ball = new Ball(this.world);
 
         debugRenderer = new Box2DDebugRenderer();
@@ -84,10 +88,11 @@ public class PlayingState extends State implements com.badlogic.gdx.physics.box2
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
-        background.render(batch);
-        this.platform.render(batch);
-        this.ball.render(batch);
-//        this.debugRenderer.render(world,camera.combined);
+//        background.render(batch);
+//        this.platform.render(batch);
+//        this.ball.render(batch);
+//        this.speedUp.render(batch);
+        this.debugRenderer.render(world, camera.combined);
 
     }
 

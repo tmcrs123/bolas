@@ -16,15 +16,17 @@ public class PowerUp {
     public BodyDef bodyDef;
     private SpriteBatch batch;
 
-    public PowerUp(World world){
+
+
+    public PowerUp(float startX , float startY, float width , float height, World world){
         bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(5, 2);
+        bodyDef.position.set(startX, startY);
 
         Texture tex = new Texture("core/assets/images/speedUp.png"); // ASSET DO CARALHO
 
         this.sprite = new Sprite(tex);
-        this.sprite.setSize(1f, 1f);
+        this.sprite.setSize(width, height);
         this.sprite.setPosition(bodyDef.position.x,bodyDef.position.y);
         this.sprite.setOrigin(sprite.getX()/2,sprite.getY()/2);
         this.sprite.setOriginCenter();
@@ -45,10 +47,13 @@ public class PowerUp {
         body.createFixture(fixtureDef);
     }
 
-    public void speedUp(){
 
-        // call ball method here
 
+
+    public void render(SpriteBatch batch){
+
+        this.sprite.setPosition(this.body.getPosition().x - this.sprite.getWidth()/2, this.body.getPosition().y - sprite.getHeight()/2);
+        this.sprite.draw(batch);
 
     }
 

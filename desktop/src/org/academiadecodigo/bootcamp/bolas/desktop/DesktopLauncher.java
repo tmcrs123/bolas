@@ -5,6 +5,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import org.academiadecodigo.bootcamp.bolas.BolaState;
 import org.academiadecodigo.bootcamp.bolas.Bolas;
 import org.academiadecodigo.bootcamp.bolas.state.GameStateManager;
+import org.academiadecodigo.bootcamp.bolas.state.PlayingState;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
@@ -14,7 +15,7 @@ public class DesktopLauncher {
 		config.backgroundFPS = 60;
 		config.height = 1078/2;
 		config.width = 675;
-		new LwjglApplication(new Bolas(), config);
+		new LwjglApplication( new Bolas(), config);
 
 	}
 }
