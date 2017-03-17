@@ -4,10 +4,19 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Created by codecadet on 3/16/17.
  */
 public class Background {
+
+    private static float DIGIT_WIDTH = 0.1f;
+    private static float DIGIT_HEIGHT = 0.1f;
+
+    private static float DIGIT_Y = 1;
+    private static float DIGIT_X = 0.5f;
 
     private Sprite sprite;
     private Sprite spriteClone;
@@ -20,57 +29,57 @@ public class Background {
     private float cameraWidth;
     private float cameraHeight;
     private boolean start;
-    private Sprite spriteScore1;
-    private Sprite spriteScore2;
-    private Sprite spriteScore3;
+
+    private List<Sprite> scoreSprites;
+
     private int score;
 
     public Background(float cameraWidth, float cameraHeight) {
 
         score = 0;
 
-        texture = new Texture("core/assets/images/background.png");
-        textureScore1 = new Texture("core/assets/images/numeral0.png");
-        textureScore2 = new Texture("core/assets/images/numeral0.png");
-        textureScore3 = new Texture("core/assets/images/numeral0.png");
-
-        /*
-        textureScore4 = new Texture("core/assets/images/numeral4.png");
-        textureScore5 = new Texture("core/assets/images/numeral5.png");
-        textureScore6 = new Texture("core/assets/images/numeral6.png");
-        textureScore7 = new Texture("core/assets/images/numeral7.png");
-        textureScore8 = new Texture("core/assets/images/numeral8.png");
-        textureScore9 = new Texture("core/assets/images/numeral9.png");
-        textureScore0 = new Texture("core/assets/images/numeral0.png");
-        */
-
-
-
         this.cameraWidth = cameraWidth;
         this.cameraHeight = cameraHeight;
 
+        this.texture = new Texture("core/assets/images/background.png");
+
         this.sprite = new Sprite(texture);
-        this.sprite.setSize(cameraWidth,cameraHeight*2);
-        this.sprite.setPosition(0,-cameraHeight);
+        this.sprite.setSize(cameraWidth, cameraHeight * 2);
+        this.sprite.setPosition(0, -cameraHeight);
 
         this.spriteClone = new Sprite(texture);
-        this.spriteClone.setSize(cameraWidth,cameraHeight*2);
-        this.spriteClone.setPosition(0,(-cameraHeight*2)+0.05f);
+        this.spriteClone.setSize(cameraWidth, cameraHeight * 2);
+        this.spriteClone.setPosition(0, (-cameraHeight * 2) + 0.05f);
 
+        this.initializeSpriteArray();
+
+    }
+
+    public void initializeSpriteArray() {
+        this.scoreSprites = new LinkedList<>();
+
+
+        for (int i = 0; i < 10; i++) {
+            Texture t = new Texture("core/assets/images/numeral" + i + ".png");
+            Sprite s = new Sprite(t);
+            s.setSize(1, 1);
+
+            this.scoreSprites.add(new Sprite(t));
+        }
 
     }
 
 
-    public void move(float dt, int DELAY){
+    public void move(float dt, int DELAY) {
 
-        if(start) {
+        if (start) {
             score++;
 
             System.out.println(this.sprite.getY());
 
-            if ( this.sprite.getY() < 0 ) {
+            if (this.sprite.getY() < 0) {
 
-                if ( this.spriteClone.getY() + this.spriteClone.getHeight() > cameraHeight ) {
+                if (this.spriteClone.getY() + this.spriteClone.getHeight() > cameraHeight) {
 
                     this.spriteClone.translate(0, dt / DELAY);
 
@@ -78,13 +87,13 @@ public class Background {
 
                 this.sprite.translate(0, dt / DELAY);
 
-                if ( ( this.spriteClone.getY() + this.spriteClone.getHeight() ) >= cameraHeight && this.sprite.getY() >= 0 ) {
-                    this.spriteClone.setPosition(0, (-cameraHeight*2)+0.05f);
+                if ((this.spriteClone.getY() + this.spriteClone.getHeight()) >= cameraHeight && this.sprite.getY() >= 0) {
+                    this.spriteClone.setPosition(0, (-cameraHeight * 2) + 0.05f);
                 }
 
 
-            } else if ( this.spriteClone.getY() <= 0 ) {
-                if ( this.sprite.getY() + this.sprite.getHeight() >= cameraHeight ) {
+            } else if (this.spriteClone.getY() <= 0) {
+                if (this.sprite.getY() + this.sprite.getHeight() >= cameraHeight) {
 
                     this.sprite.translate(0, dt / DELAY);
 
@@ -92,82 +101,54 @@ public class Background {
 
                 this.spriteClone.translate(0, dt / DELAY);
 
-                if ( ( this.sprite.getY() + this.sprite.getHeight() ) > cameraHeight && this.spriteClone.getY() > 0 ) {
-                    this.sprite.setPosition(0, (-cameraHeight*2)+0.05f);
+                if ((this.sprite.getY() + this.sprite.getHeight()) > cameraHeight && this.spriteClone.getY() > 0) {
+                    this.sprite.setPosition(0, (-cameraHeight * 2) + 0.05f);
                 }
             }
         }
     }
 
-    public void setScore(){
-
+    public void setScore(int score) {
+        this.score = score;
     }
 
     public void render(SpriteBatch batch) {
 
-        int scoretemp = score;
-        int modScore = 0;
+        String scoreString = Integer.toString(this.score).trim();
 
-        while ( (scoretemp) > 9 ) {
-            modScore = modScore % 10;
-            scoretemp = scoretemp/10;
-        }
+        for (int i = 0; i < scoreString.length(); i++) {
 
-/*
-        if (score == 0){
-            this.spriteScore = new Sprite(textureScoreX);
-            this.spriteScore.setScale(1, 1);
-            this.spriteScore.setPosition(17*score/10 , 15);
+            int digit = Integer.parseInt(scoreString.charAt(i) + "");
+
+            Sprite s = this.scoreSprites.get(digit);
+            s.setPosition(DIGIT_X + DIGIT_WIDTH * i, DIGIT_Y);
+
+            s.draw(batch);
 
         }
 
-        if (score  == 1){
-            this.spriteScore = new Sprite(textureScore1);
-            this.spriteScore.setSize(1, 1);
-            this.spriteScore.setPosition(17*score/10 , 15);
-        }
 
-        if (score == 2){
-            this.spriteScore = new Sprite(textureScore2);
-            this.spriteScore.setSize(1, 1);
-            this.spriteScore.setPosition(17*score/10 , 15);
-        }
-*/
-
-// falta resolver isto
-        this.textureScore1 = new Texture("core/assets/images/numeral" + scoretemp + ".png");
-        this.spriteScore1 = new Sprite(textureScore1);
-
-
-        this.spriteScore1.setSize(1, 1);
-        this.spriteScore1.setPosition(18 , 15);
-
-        this.textureScore2 = new Texture("core/assets/images/numeral" + scoretemp + ".png");
-        this.spriteScore2 = new Sprite(textureScore2);
-
-        this.spriteScore2.setSize(1, 1);
-        this.spriteScore2.setPosition(17 , 15);
-
-        this.textureScore3 = new Texture("core/assets/images/numeral" + scoretemp + ".png");
-        this.spriteScore3 = new Sprite(textureScore3);
-
-        this.spriteScore3.setSize(1, 1);
-        this.spriteScore3.setPosition(16 , 15);
-
-
-        this.sprite.draw(batch);
-        this.spriteClone.draw(batch);
-        this.spriteScore1.draw(batch);
-        this.spriteScore2.draw(batch);
-        this.spriteScore3.draw(batch);
 
     }
 
-    public void start(){
+    public void start() {
         this.start = true;
     }
 
-    public void stop(){
+    public void stop() {
         this.start = false;
     }
+
+    public void dispose() {
+
+        this.sprite.getTexture().dispose();
+        this.spriteClone.getTexture().dispose();
+        
+        for (Sprite s : this.scoreSprites) {
+            s.getTexture().dispose();
+        }
+
+    }
+
+
 }

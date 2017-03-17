@@ -185,6 +185,7 @@ public class PlayingState extends State {
             }
 //        }
 
+        score++;
 
 
     }
@@ -194,10 +195,9 @@ public class PlayingState extends State {
 
         camera.update();
         batch.setProjectionMatrix(camera.combined);
-        score++;
 
-        background.render(batch);
-
+        this.background.setScore(this.score);
+        this.background.render(batch);
 
         this.checkForPlatformDeletion();
         this.renderPlatforms(batch);
