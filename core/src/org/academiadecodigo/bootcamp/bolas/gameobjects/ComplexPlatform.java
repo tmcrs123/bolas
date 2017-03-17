@@ -15,6 +15,8 @@ public class ComplexPlatform {
 
     private List<Platform> platforms;
 
+    private static float boundaryHeight = 3;
+
     private float x;
     private float y;
 
@@ -23,6 +25,9 @@ public class ComplexPlatform {
 
     private int holeNumber = 0;
     private float holeWidth = 0;
+
+    private float speedX;
+    private float speedY;
 
 
     public ComplexPlatform(float x, float y, float width, float height,  World world) {
@@ -34,10 +39,15 @@ public class ComplexPlatform {
 
     }
 
+    public ComplexPlatform(float x, float y, float width, float height) {
+        this(x, y, width, height, null);
+
+    }
+
     public void constructPlatforms(World world) {
-        this.platforms.add(new Platform( this.x - this.width/2 - WALL_THICKNESS/2 , this.y + this.width * 0.5f + this.height/2, WALL_THICKNESS, this.width, world));
+        this.platforms.add(new Platform(this.x - this.width / 2 - WALL_THICKNESS / 2, this.y + boundaryHeight/2 + this.height/2, WALL_THICKNESS, boundaryHeight, world));
         this.createMiddlePlatforms(world);
-        this.platforms.add(new Platform( this.x + this.width/2 + WALL_THICKNESS/2 , this.y + this.width * 0.5f + this.height/2, WALL_THICKNESS, this.width , world));
+        this.platforms.add(new Platform( this.x + this.width/2 + WALL_THICKNESS/2 , this.y + boundaryHeight/2 + this.height/2, WALL_THICKNESS, boundaryHeight , world));
 
     }
 
@@ -119,20 +129,28 @@ public class ComplexPlatform {
 
     public void render(SpriteBatch batch) {
 
+
         for (Platform p : this.platforms) {
             p.render(batch);
         }
 
+        this.y = this.platforms.get(1).getY();
     }
 
-    public boolean isOutsideBoundaries(int x0, int y0, int xf, int yf) {
-        return this.x > xf || this.y > yf ||
-                this.x < x0 || this.y < y0;
+    public boolean isOutsideBoundaries(float x0, float y0, float xf, float yf) {
+         boolean b1 = this.x + this.width / 2 > xf;
+        boolean b2 = this.y + this.height/2 > yf;
+        boolean b3 = this.x - this.width/2 < x0;
+        boolean b4 = this.y - this.height/2 < y0;
+
+        return b1 || b2 || b3 || b4;
     }
 
     public void setSpeed(float newSpeedX, float newSpeedY) {
+        this.speedX = newSpeedX;
+        this.speedY = newSpeedY;
         for (Platform p : this.platforms) {
-            p.setSpeed(newSpeedX, newSpeedY);
+            p.setSpeed(this.speedX, this.speedY);
         }
     }
 
@@ -150,5 +168,36 @@ public class ComplexPlatform {
         }
     }
 
+    public float getX() {
+        return this.x;
+    }
 
+    public float getY() {
+        return this.platforms.get(1).getY();
+    }
+
+    public float getWidth() {
+        return width;
+    }
+
+    public float getHeight() {
+        return height;
+    }
+
+
+    public int getHoleNumber() {
+        return holeNumber;
+    }
+
+    public float getHoleWidth() {
+        return holeWidth;
+    }
+
+    public float getSpeedX() {
+        return this.speedX;
+    }
+
+    public float getSpeedY() {
+        return this.speedY;
+    }
 }

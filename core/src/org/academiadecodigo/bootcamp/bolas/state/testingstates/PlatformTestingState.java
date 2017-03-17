@@ -43,11 +43,11 @@ public class PlatformTestingState extends State{
     @Override
     public void update(float dt) {
 
-        if (this.platform.isOutsideBoundaries(0, -1, 10, 10)) {
-            this.platform.dispose();
-            this.platform = new Platform(1, 10, 1, 1, world);
-            this.platform.setSpeed((float) 0, (float) -2);
-        }
+//        if (this.platform.isOutsideBoundaries(0, -1, 10, 10)) {
+//            this.platform.dispose();
+//            this.platform = new Platform(1, 10, 1, 1, world);
+//            this.platform.setSpeed((float) 0, (float) -2);
+//        }
 
         world.step(1/60f, 6, 2);
     }
